@@ -1,6 +1,14 @@
 # pulsegrid
 
+[![verify](https://github.com/noorps/pulsegrid/actions/workflows/verify.yml/badge.svg)](https://github.com/noorps/pulsegrid/actions/workflows/verify.yml)
+
 pulsegrid is a small multi-tenant telemetry platform built around the kinds of problems that show up when thousands of devices are sending data at the same time. it accepts vehicle-style telemetry over an API, partitions events by tenant and device in kafka, retries transient failures, sends poisoned records to a dead-letter topic, and materializes the latest reading for low-latency queries.
+
+## measured run
+
+[github actions run #2](https://github.com/noorps/pulsegrid/actions/runs/34680597374/job/103518415961#step:5:1) accepted 10,000/10,000 simulated readings at 1,003 events/sec with 56.3 ms p50 and 106.6 ms p95 request latency. the run used 64 concurrent clients against the full docker compose stack with one kafka broker.
+
+this is a repeatable portfolio benchmark on a github-hosted linux runner, not a production-scale claim. the workflow builds the stack from the repository before every run.
 
 ## why i built it
 
@@ -54,7 +62,7 @@ mvn test
 python tools/load_test.py --events 10000 --workers 64
 ```
 
-the load test prints accepted events, throughput, and p50/p95 request latency. results depend on the machine, so i keep measured numbers out of the readme unless they are reproducible on the hardware being discussed.
+the load test prints accepted events, throughput, and p50/p95 request latency. the measured result above is tied to the public github actions run so the environment and output can be checked directly.
 
 ## failure handling
 
