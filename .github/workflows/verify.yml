@@ -15,3 +15,20 @@ jobs:
           java-version: "21"
           cache: maven
       - run: mvn --batch-mode verify
+
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: start telemetry stack
+        run: docker compose up -d --build
+      - name: wait for api
+        run: timeout 180 bash -c 'until curl -fsS http://localhost:8080/actuator/health; do sleep 3; done'
+      - name: run 10k event benchmark
+        run: python tools/load_test.py --events 10000 --workers 64
+      - name: show service logs
+        if: failure()
+        run: docker compose logs
+      - name: stop telemetry stack
+        if: always()
+        run: docker compose down
