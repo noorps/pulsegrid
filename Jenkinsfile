@@ -8,6 +8,7 @@ pipeline {
     environment {
         COMPOSE_PROJECT_NAME = 'pulsegrid-jenkins'
         BENCHMARK_BASE_URL = 'http://docker:8080'
+        WARMUP_EVENTS = '2000'
     }
     options {
         disableConcurrentBuilds()
@@ -44,6 +45,8 @@ done
 echo 'Application did not become healthy' >&2
 exit 1
 '''
+                // Settle JVM compilation and Kafka metadata before the measured 10k run.
+                sh 'python3 tools/load_test.py --events "$WARMUP_EVENTS" --workers 64 --base-url "$BENCHMARK_BASE_URL" > artifacts/warmup.txt'
             }
         }
         stage('Benchmark') {
@@ -55,7 +58,10 @@ exit 1
         }
         stage('Gate') {
             steps {
-                sh '''#!/bin/sh
+                withEnv(["MIN_EVENTS_PER_SEC=${params.MIN_EVENTS_PER_SEC}",
+                         "MAX_P95_MS=${params.MAX_P95_MS}",
+                         "FORCE_GATE_FAILURE=${params.FORCE_GATE_FAILURE}"]) {
+                    sh '''#!/bin/sh
 set -eu
 minimum="$MIN_EVENTS_PER_SEC"
 if [ "$FORCE_GATE_FAILURE" = "true" ]; then
@@ -65,6 +71,7 @@ python3 tools/benchmark_gate.py artifacts/benchmark.txt \
     --min-events-per-sec "$minimum" --max-p95-ms "$MAX_P95_MS" \
     --output artifacts/gate.json
 '''
+                }
             }
         }
         stage('Publish') {
