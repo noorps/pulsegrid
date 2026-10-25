@@ -64,6 +64,70 @@ python tools/load_test.py --events 10000 --workers 64
 
 the load test prints accepted events, throughput, and p50/p95 request latency. the measured result above is tied to the public github actions run so the environment and output can be checked directly.
 
+## jenkins locally
+
+Jenkins runs alongside the unchanged GitHub Actions workflow. The root `Jenkinsfile`
+builds with Java 21/Maven, runs unit tests, starts Compose and checks API health,
+runs the existing 10,000-event benchmark, applies the gate, and publishes artifacts.
+Its `post { always { ... } }` block collects service logs and tears down Compose,
+including volumes, after success or failure. Failed gates still archive their results.
+
+The gate defaults at the top of `Jenkinsfile` require **750 events/sec minimum**,
+**150 ms p95 maximum**, and **10,000/10,000 accepted**. Relative to the recorded
+GitHub Actions baseline (1,003 events/sec, 106.6 ms p95), these allow about 25%
+less throughput and 41% more p95 latency for local machine variation. These are
+portfolio performance budgets, not production SLOs. Missing or malformed output
+fails the gate. Parameters make thresholds adjustable without editing code.
+
+For a local, single-user Jenkins instance, install Docker Desktop with a working
+Linux engine and Docker Compose, and check out the implementation branch:
+
+```bash
+git switch codex/jenkins-pipeline
+docker compose -f ops/jenkins/compose.yml up -d --build
+docker compose -f ops/jenkins/compose.yml exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+```
+
+Open [local Jenkins](http://localhost:8081), unlock with that password, and finish
+the setup wizard, creating your admin account (for example, `noorps`). The image
+preinstalls Pipeline, Git, and JUnit plugins, Maven, Python, and Docker Compose.
+The `pulsegrid` job is created automatically and checks out **committed** files
+from this local clone's `codex/jenkins-pipeline` branch. Commit changes before
+running it. A different branch requires changing the job's SCM branch setting.
+
+The controller and a dedicated Docker-in-Docker daemon share the workspace volume
+at the same path, so nested Compose bind mounts (including Prometheus config) work.
+The benchmark reaches the stack at `http://docker:8080`. The daemon has no published
+host port; Jenkins listens only on host loopback. This setup uses a privileged
+daemon and runs trusted builds on the controller; use it only for local development.
+Use one PulseGrid job at a time: the stack uses fixed ports in the dedicated daemon.
+
+Click **Build Now** for the first run; subsequent runs expose **Build with Parameters**.
+For authentic evidence capture, generate an API token under your Jenkins account's
+Security settings, set `JENKINS_USER` and `JENKINS_TOKEN` in your shell, and run:
+
+```bash
+python ops/jenkins/capture_run.py
+python ops/jenkins/capture_run.py --force-gate-failure
+```
+
+The second command raises only that run's throughput minimum to an intentionally
+impossible 1,000,000,000,000 events/sec. It does not alter benchmark measurements
+or persist a broken threshold. It requires Jenkins `FAILURE` and an archived
+throughput gate rejection; an earlier infrastructure failure does not qualify.
+The next normal run again uses 750/150 defaults. The script saves unmodified
+`consoleText` and Jenkins build metadata under `docs/jenkins/`. Jenkins also archives
+benchmark text, gate JSON, revision, health response, service logs, and (on success)
+the application JAR. Review evidence before committing it.
+
+Stop local Jenkins and its dedicated engine after use (keeps their volumes):
+
+```bash
+docker compose -f ops/jenkins/compose.yml down
+```
+
+Execution status and evidence are recorded in [docs/jenkins](docs/jenkins/README.md).
+
 ## failure handling
 
 - kafka publish failures return an error instead of pretending the event was accepted
