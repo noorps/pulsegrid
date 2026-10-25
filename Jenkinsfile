@@ -10,6 +10,7 @@ pipeline {
         COMPOSE_FILE = 'docker-compose.yml:ops/jenkins/stack.yml'
         BENCHMARK_BASE_URL = 'http://docker:8080'
         WARMUP_EVENTS = '2000'
+        BENCHMARK_IMAGE = 'python:3.13-slim'
     }
     options {
         disableConcurrentBuilds()
@@ -47,13 +48,19 @@ echo 'Application did not become healthy' >&2
 exit 1
 '''
                 // Settle JVM compilation and Kafka metadata before the measured 10k run.
-                sh 'python3 tools/load_test.py --events "$WARMUP_EVENTS" --workers 64 --base-url "$BENCHMARK_BASE_URL" > artifacts/warmup.txt'
+                sh '''docker run --rm -i --name "$COMPOSE_PROJECT_NAME-benchmark" \
+                    --network "${COMPOSE_PROJECT_NAME}_default" "$BENCHMARK_IMAGE" \
+                    python - --events "$WARMUP_EVENTS" --workers 64 --base-url http://app:8080 \
+                    < tools/load_test.py > artifacts/warmup.txt'''
             }
         }
         stage('Benchmark') {
             steps {
                 // Redirect first so Python's failure cannot be hidden by a pipe to tee.
-                sh 'python3 tools/load_test.py --events 10000 --workers 64 --base-url "$BENCHMARK_BASE_URL" > artifacts/benchmark.txt'
+                sh '''docker run --rm -i --name "$COMPOSE_PROJECT_NAME-benchmark" \
+                    --network "${COMPOSE_PROJECT_NAME}_default" "$BENCHMARK_IMAGE" \
+                    python - --events 10000 --workers 64 --base-url http://app:8080 \
+                    < tools/load_test.py > artifacts/benchmark.txt'''
                 sh 'cat artifacts/benchmark.txt'
             }
         }
@@ -87,7 +94,13 @@ python3 tools/benchmark_gate.py artifacts/benchmark.txt \
                     sh 'mkdir -p artifacts; docker compose logs --no-color > artifacts/compose.log 2>&1'
                 } finally {
                     try {
-                        sh 'docker compose down --volumes --remove-orphans'
+                        try {
+                            sh '''if docker container inspect "$COMPOSE_PROJECT_NAME-benchmark" >/dev/null 2>&1; then
+                                docker rm -f "$COMPOSE_PROJECT_NAME-benchmark"
+                            fi'''
+                        } finally {
+                            sh 'docker compose down --volumes --remove-orphans'
+                        }
                     } finally {
                         archiveArtifacts artifacts: 'artifacts/*', allowEmptyArchive: true
                     }
