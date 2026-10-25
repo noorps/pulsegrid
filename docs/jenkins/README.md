@@ -1,5 +1,7 @@
 # Verified local Jenkins runs
 
+Archived Jenkins .log and .json files predate the rename; the old project name in them is expected.
+
 Executed October 25, 2026 on Docker Desktop's Linux engine. Passing build 8 used
 source `a6d8c8699aaaf12f95eff36e83ec84015800bad3`. The new baseline (10) and
 real CPU-regression run (11) both used `93fdbf45625a8d65132e2753efeded29b508b459`.
@@ -73,7 +75,7 @@ python ops/jenkins/capture_run.py --build-number 11 --inject-cpu-regression
 | Warmup and runtime | Starts the stack, waits for health, then measures; no explicit warmup or JVM processor override | Fixed 120-second warmup, then a fresh measured sample; app and broker JVMs use `-XX:ActiveProcessorCount=2` |
 | Shared workload | 10,000 readings, 64 workers, one Kafka 3.9.0 broker, Java 21 / Spring Boot application | Same load-test script, event count, worker count, broker version and application |
 
-The original [job log](https://github.com/noorps/pulsegrid/actions/runs/34680597374/job/103518415961)
+The original [job log](https://github.com/noorps/tern/actions/runs/34680597374/job/103518415961)
 records the runner image, while GitHub documents the [standard public-runner hardware class](https://docs.github.com/en/actions/reference/runners/github-hosted-runners#standard-github-hosted-runners-for-public-repositories).
 These are different hardware and measurement configurations, so they describe two
 environments rather than a controlled before/after improvement. Higher throughput
@@ -116,7 +118,7 @@ verification on one laptop, with one Kafka broker.
   reached `Finished: FAILURE`.
 - The original root Dockerfile, Compose file, POM, load test and
   `.github/workflows/verify.yml` are byte-for-byte unchanged from base `08f7303`.
-- The unchanged [GitHub Actions verification on the tested revision](https://github.com/noorps/pulsegrid/actions/runs/40166118864)
+- The unchanged [GitHub Actions verification on the tested revision](https://github.com/noorps/tern/actions/runs/40166118864)
   also passed.
 
 ## Earlier retained attempts

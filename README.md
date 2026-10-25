@@ -1,141 +1,86 @@
-# pulsegrid
+# tern
 
-[![verify](https://github.com/noorps/pulsegrid/actions/workflows/verify.yml/badge.svg)](https://github.com/noorps/pulsegrid/actions/workflows/verify.yml)
+tern takes device readings over HTTP, publishes them to Kafka, and keeps the latest
+reading available for queries. I built it to work through ordering and replay
+problems that show up when lots of clients send telemetry at once.
 
-pulsegrid is a small multi-tenant telemetry platform built around the kinds of problems that show up when thousands of devices are sending data at the same time. it accepts vehicle-style telemetry over an API, partitions events by tenant and device in kafka, retries transient failures, sends poisoned records to a dead-letter topic, and materializes the latest reading for low-latency queries.
+The hard part was preserving per-device ordering under concurrent clients without
+letting a replay or an old reading corrupt the latest value. Events use
+`tenantId:deviceId` as the Kafka key. The materializer ignores duplicate event ids
+and won't replace a newer reading with a stale one. Producers wait for Kafka's
+acknowledgment before the API returns 202. The latest-reading store is in memory.
 
-## measured run
+## measurements
 
-[github actions run #2](https://github.com/noorps/pulsegrid/actions/runs/34680597374/job/103518415961#step:5:1) accepted 10,000/10,000 simulated readings at 1,003 events/sec with 56.3 ms p50 and 106.6 ms p95 request latency. the run used 64 concurrent clients against the full docker compose stack with one kafka broker.
+The original [Actions run](https://github.com/noorps/tern/actions/runs/34680597374)
+accepted **10,000/10,000 readings at 1,003 events/sec**, with **56.3 ms p50 and
+106.6 ms p95**. That used 64 clients, Java 21 and one Kafka 3.9.0 broker on a
+GitHub-hosted Ubuntu 24.04 runner (standard public-runner class: 4 vCPU, 16 GB RAM).
 
-this is a repeatable portfolio benchmark on a github-hosted linux runner, not a production-scale claim. the workflow builds the stack from the repository before every run.
+A local Jenkins run accepted the same count at **1,392 events/sec**, with
+**34.7 ms p50 and 116.6 ms p95**. That was an i7-1355U laptop with 16 GB RAM;
+Docker had 12 logical CPUs and about 7.6 GiB RAM. It used a 120-second warmup,
+64 clients pinned to logical CPU 0, and two-processor JVM awareness. These are
+different environments, not a before/after speedup. A later unrestricted run
+missed the p95 budget; the [raw evidence and configuration](docs/jenkins/README.md)
+include both passes and misses.
 
-## why i built it
+## running locally
 
-i wanted to understand what makes a telemetry service reliable beyond just getting a `200` back from an endpoint. duplicate events, late readings, noisy tenants, broker failures, and visibility into the system all matter once data is arriving continuously. this project gave me a focused way to work through those tradeoffs in java instead of hiding them behind a managed service.
-
-## architecture
-
-```text
-device clients
-     |
-     v
-ingest api  ->  kafka: telemetry.events.v1  ->  materializer  ->  latest-reading api
-  |                         |
-  |                         +-> retries -> dead-letter topic
-  +-> tenant auth
-  +-> prometheus metrics
-```
-
-events use `tenantId:deviceId` as the kafka key, so readings for one device stay ordered while partitions can be consumed concurrently. producers use `acks=all` and idempotent delivery. consumers keep manual record-level offsets, reject duplicates by event id, and refuse to let a late reading overwrite a newer one.
-
-## run it
-
-you need docker compose.
+You need Docker Compose and Python 3 for the load client.
 
 ```bash
-docker compose up --build
-```
-
-send an event:
-
-```bash
-curl -X POST http://localhost:8080/v1/tenants/demo/telemetry \
-  -H "Content-Type: application/json" \
-  -H "X-API-Key: demo-local-key" \
-  -d '{"tenantId":"demo","deviceId":"vehicle-7","eventId":"550e8400-e29b-41d4-a716-446655440000","recordedAt":"2026-09-11T12:00:00Z","metric":"battery_pct","value":81.4}'
-```
-
-query the latest reading:
-
-```bash
-curl "http://localhost:8080/v1/tenants/demo/devices/vehicle-7/latest?metric=battery_pct" \
-  -H "X-API-Key: demo-local-key"
-```
-
-prometheus is available at `http://localhost:9090`. application health is at `http://localhost:8080/actuator/health`.
-
-## test it
-
-```bash
-mvn test
+docker compose up -d --build --wait --wait-timeout 180
+curl --retry 30 --retry-connrefused --retry-delay 2 -fsS http://localhost:8080/actuator/health
 python tools/load_test.py --events 10000 --workers 64
 ```
 
-the load test prints accepted events, throughput, and p50/p95 request latency. the measured result above is tied to the public github actions run so the environment and output can be checked directly.
-
-## jenkins locally
-
-The root `Jenkinsfile` builds with Java 21/Maven, runs unit tests, starts the
-Compose stack and waits for health, benchmarks 10,000 readings, checks the gate,
-and publishes results. Its always block saves service logs and removes the stack
-after success or failure. GitHub Actions continues to run its existing workflow.
-
-The gate requires **at least 750 events/sec**, **p95 at most 150 ms**, and
-**10,000/10,000 accepted**. Compared with the original Actions measurement of
-1,003 events/sec and 106.6 ms p95, that allows about 25% less throughput and 41%
-more tail latency for machine variation. These are portfolio performance budgets.
-The thresholds are parameters at the top of `Jenkinsfile`.
-
-With Docker Desktop's Linux engine and Compose running, start Jenkins from main:
+The API is on port 8080 and Prometheus is on 9090. The load client uses the local
+`demo` tenant and `demo-local-key`. You can read a materialized value with:
 
 ```bash
-git switch main
+curl -H "X-API-Key: demo-local-key" "http://localhost:8080/v1/tenants/demo/devices/vehicle-7/latest?metric=battery_pct"
+docker compose down
+```
+
+For host-side unit tests, use Java 21 and Maven: `mvn test`.
+
+## jenkins
+
+Stop the regular stack first so ports 8080 and 9090 are free, then start the local
+controller:
+
+```bash
 docker compose -f ops/jenkins/compose.yml up -d --build
 docker compose -f ops/jenkins/compose.yml exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 ```
 
-Open [local Jenkins](http://localhost:8081), unlock it and finish the setup wizard.
-The image includes Pipeline, Git and JUnit plugins and the build tools. The
-automatically created `pulsegrid` job reads committed files from the local clone's
-`main` branch. For another branch, set `PULSEGRID_BRANCH` before creating the job
-or change an existing job's SCM branch. Leave host ports 8080 and 9090 free.
-The controller uses the Docker socket, so this setup is for trusted local builds.
+Open [Jenkins](http://localhost:8081), finish setup, and run the `tern` job. It reads
+committed files from the local clone's `main` branch. Set `TERN_BRANCH` before
+creating the job to use a different branch. The controller mounts the Docker
+socket, so use this setup for trusted local builds.
 
-Click **Build Now** initially, then **Build with Parameters** for later runs.
-The steady-state protocol uses a fixed 120-second warmup before a fresh measured
-10,000-event sample, 64 clients on logical CPU 0, and two-processor JVM awareness.
-See [benchmark environments and evidence](docs/jenkins/README.md) for configuration
-and why the Jenkins and older Actions numbers differ.
+The pipeline builds, tests, starts the stack, warms it for 120 seconds, then
+measures a fresh 10,000 readings. The gate requires **at least 750 events/sec,
+at most 150 ms p95, and 10,000/10,000 accepted**. Those values leave about 25%
+throughput and 41% p95 headroom from the original hosted result. Cleanup runs
+after a pass or failure, and both outcomes keep their artifacts.
 
-To capture evidence, create a Jenkins API token, set `JENKINS_USER` and
-`JENKINS_TOKEN` in your shell, then run:
+After the first build, set `JENKINS_USER` and `JENKINS_TOKEN` to your local account
+and API token to run and export a build:
 
 ```bash
 python ops/jenkins/capture_run.py
 python ops/jenkins/capture_run.py --inject-cpu-regression
 ```
 
-The second run limits the warmed application to **0.25 CPU**, measures the same
-10,000 readings, and checks the normal **750/150** thresholds. It saves the actual
-Docker CPU configuration, measurements, gate decision and final Jenkins console.
-Cleanup removes the limited container; the next normal run starts unrestricted.
-`FORCE_GATE_FAILURE` remains available as a threshold-wiring test; the CPU-limited
-run is the regression evidence. Use `--build-number N` to export a completed run.
+The second command limits the warmed service to 0.25 CPU while keeping the normal
+gate thresholds. The recorded regression accepted every reading but measured
+**154 events/sec and 693.3 ms p95**, and Jenkins finished FAILURE. See
+[the original consoles](docs/jenkins/README.md) for the complete record.
 
-The recorded CPU-regression run accepted 10,000/10,000 readings at **154 events/sec
-and 693.3 ms p95** and made Jenkins finish **FAILURE** at the normal thresholds.
-The earlier passing run and later unrestricted budget miss are also retained in
-[the evidence](docs/jenkins/README.md).
+On Windows, `tools/local-dev/keep-awake.ps1` prevents idle sleep during local builds.
+Stop the controller with `docker compose -f ops/jenkins/compose.yml down`.
 
-Windows only: `tools/local-dev/keep-awake.ps1` temporarily prevents idle sleep while local builds run.
-
-Stop Jenkins without deleting its history:
-
-```bash
-docker compose -f ops/jenkins/compose.yml down
-```
-
-## failure handling
-
-- kafka publish failures return an error instead of pretending the event was accepted
-- consumer failures use exponential backoff before moving the record to the dead-letter topic
-- event ids make materialization idempotent
-- tenant credentials are compared in constant time and every query is scoped to a tenant
-- prometheus counters separate accepted, failed, stored, and duplicate events
-
-## next steps
-
-- replace the in-memory latest-reading view with a replicated store
-- add schema compatibility checks for event-version migrations
-- run kafka with three brokers and validate behavior during broker loss
+For event-time aggregates and historical files from the same stream, see
+[event-time-pipeline](https://github.com/noorps/event-time-pipeline).
