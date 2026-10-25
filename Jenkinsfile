@@ -4,6 +4,7 @@ pipeline {
         string(name: 'MIN_EVENTS_PER_SEC', defaultValue: '750', description: 'Minimum benchmark throughput')
         string(name: 'MAX_P95_MS', defaultValue: '150', description: 'Maximum p95 request latency in milliseconds')
         booleanParam(name: 'FORCE_GATE_FAILURE', defaultValue: false, description: 'Evidence run: use an impossible throughput threshold without changing measured results')
+        booleanParam(name: 'INJECT_CPU_REGRESSION', defaultValue: false, description: 'Limit the warmed application to 0.25 CPU for a real regression test')
     }
     environment {
         COMPOSE_PROJECT_NAME = 'pulsegrid-jenkins'
@@ -48,7 +49,7 @@ done
 echo 'Application did not become healthy' >&2
 exit 1
 '''
-                // Fixed duration, independent of measured performance or gate outcome.
+                // Warm the JVM and Kafka before measuring steady-state requests.
                 sh '''#!/bin/sh
 set -eu
 deadline=$(( $(date +%s) + WARMUP_SECONDS ))
@@ -64,7 +65,13 @@ cat artifacts/warmup.txt
         }
         stage('Benchmark') {
             steps {
-                // Redirect first so Python's failure cannot be hidden by a pipe to tee.
+                script {
+                    if (params.INJECT_CPU_REGRESSION) {
+                        // Throttle the service after warmup to test the normal performance budget.
+                        sh '''docker update --cpus 0.25 "$(docker compose ps -q app)"
+docker inspect --format '{{json .HostConfig}}' "$(docker compose ps -q app)" > artifacts/regression.json'''
+                    }
+                }
                 sh 'sh tools/jenkins_benchmark.sh 10000 > artifacts/benchmark.txt'
                 sh 'cat artifacts/benchmark.txt'
             }
@@ -94,7 +101,7 @@ python3 tools/benchmark_gate.py artifacts/benchmark.txt \
     post {
         always {
             script {
-                // Finally guarantees teardown even when log collection fails.
+                // Capture service logs before removing the stack.
                 try {
                     sh 'mkdir -p artifacts; docker compose logs --no-color > artifacts/compose.log 2>&1'
                 } finally {
