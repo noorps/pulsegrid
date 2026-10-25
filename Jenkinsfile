@@ -48,19 +48,13 @@ echo 'Application did not become healthy' >&2
 exit 1
 '''
                 // Settle JVM compilation and Kafka metadata before the measured 10k run.
-                sh '''docker run --rm -i --name "$COMPOSE_PROJECT_NAME-benchmark" \
-                    --network "${COMPOSE_PROJECT_NAME}_default" "$BENCHMARK_IMAGE" \
-                    python - --events "$WARMUP_EVENTS" --workers 64 --base-url http://app:8080 \
-                    < tools/load_test.py > artifacts/warmup.txt'''
+                sh 'sh tools/jenkins_benchmark.sh "$WARMUP_EVENTS" > artifacts/warmup.txt'
             }
         }
         stage('Benchmark') {
             steps {
                 // Redirect first so Python's failure cannot be hidden by a pipe to tee.
-                sh '''docker run --rm -i --name "$COMPOSE_PROJECT_NAME-benchmark" \
-                    --network "${COMPOSE_PROJECT_NAME}_default" "$BENCHMARK_IMAGE" \
-                    python - --events 10000 --workers 64 --base-url http://app:8080 \
-                    < tools/load_test.py > artifacts/benchmark.txt'''
+                sh 'sh tools/jenkins_benchmark.sh 10000 > artifacts/benchmark.txt'
                 sh 'cat artifacts/benchmark.txt'
             }
         }
