@@ -1,0 +1,9 @@
+services:
+  prometheus:
+    image: pulsegrid-jenkins-prometheus
+    build:
+      context: .
+      dockerfile: ops/jenkins/Prometheus.Dockerfile
+    # The daemon runs outside Jenkins; its filesystem has no Jenkins workspace.
+    # Bake the same config into the image instead of using a host bind mount.
+    volumes: !reset []

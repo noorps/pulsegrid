@@ -6,6 +6,7 @@ import json
 import os
 import time
 from pathlib import Path
+from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
@@ -42,14 +43,22 @@ def main():
     queued = wait_json(headers['Location'] + 'api/json', lambda item: 'executable' in item, deadline)
     build_url = queued['executable']['url']
     result = wait_json(build_url + 'api/json', lambda item: item.get('result') is not None, deadline)
-    label = 'gate-failed' if args.force_gate_failure else 'green'
+    expected = 'FAILURE' if args.force_gate_failure else 'SUCCESS'
+    label = ('gate-failed' if args.force_gate_failure else 'green') if result['result'] == expected else 'attempt'
     prefix = args.output_dir / f'{label}-{result["number"]}-{result["result"].lower()}'
     prefix.parent.mkdir(parents=True, exist_ok=True)
     console = fetch(build_url + 'consoleText')[0]
     prefix.with_suffix('.log').write_bytes(console)
     prefix.with_suffix('.json').write_text(json.dumps(result, indent=2) + '\n')
+    for artifact in ('benchmark.txt', 'warmup.txt', 'gate.json', 'revision.txt', 'health.json'):
+        try:
+            content = fetch(build_url + 'artifact/artifacts/' + artifact)[0]
+        except HTTPError as exc:
+            if exc.code == 404:
+                continue  # Earlier failures may not produce every artifact.
+            raise
+        (args.output_dir / f'build-{result["number"]}-{artifact}').write_bytes(content)
     print(f'Build {result["number"]}: {result["result"]}; console: {prefix.with_suffix(".log")}')
-    expected = 'FAILURE' if args.force_gate_failure else 'SUCCESS'
     if result['result'] != expected:
         raise SystemExit(f'Expected {expected}, got {result["result"]}; inspect saved console')
     if args.force_gate_failure:

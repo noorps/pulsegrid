@@ -1,34 +1,19 @@
 name: pulsegrid-ci
 services:
-  docker:
-    image: docker:29-dind
-    privileged: true
-    environment:
-      DOCKER_TLS_CERTDIR: ''
-    volumes:
-      - jenkins_home:/var/jenkins_home
-      - docker_data:/var/lib/docker
-    healthcheck:
-      test: ['CMD', 'docker', 'info']
-      interval: 5s
-      timeout: 5s
-      retries: 30
-    networks: [ci]
   jenkins:
     build: .
     ports: ['127.0.0.1:8081:8080']
     environment:
-      DOCKER_HOST: tcp://docker:2375
+      DOCKER_HOST: unix:///var/run/docker.sock
       JAVA_OPTS: '-Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true'
     volumes:
       - jenkins_home:/var/jenkins_home
       - ../..:/repo:ro
-    depends_on:
-      docker:
-        condition: service_healthy
+      - /var/run/docker.sock:/var/run/docker.sock
+    group_add: ['0']
+    extra_hosts: ['docker:host-gateway']
     networks: [ci]
 volumes:
   jenkins_home:
-  docker_data:
 networks:
   ci:

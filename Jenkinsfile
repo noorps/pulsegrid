@@ -7,6 +7,7 @@ pipeline {
     }
     environment {
         COMPOSE_PROJECT_NAME = 'pulsegrid-jenkins'
+        COMPOSE_FILE = 'docker-compose.yml:ops/jenkins/stack.yml'
         BENCHMARK_BASE_URL = 'http://docker:8080'
         WARMUP_EVENTS = '2000'
     }
