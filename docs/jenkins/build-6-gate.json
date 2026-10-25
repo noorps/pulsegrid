@@ -1,0 +1,13 @@
+{
+  "passed": false,
+  "accepted": 10000,
+  "total": 10000,
+  "events_per_sec": 515.0,
+  "p95_ms": 219.4,
+  "min_events_per_sec": 750.0,
+  "max_p95_ms": 150.0,
+  "failures": [
+    "throughput 515.0 < 750.0 events/sec",
+    "p95 219.4 > 150.0 ms"
+  ]
+}

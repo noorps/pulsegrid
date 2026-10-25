@@ -1,0 +1,192 @@
+{
+  "_class": "org.jenkinsci.plugins.workflow.job.WorkflowRun",
+  "actions": [
+    {
+      "_class": "hudson.model.ParametersAction",
+      "parameters": [
+        {
+          "_class": "hudson.model.StringParameterValue",
+          "name": "MIN_EVENTS_PER_SEC",
+          "value": "750"
+        },
+        {
+          "_class": "hudson.model.StringParameterValue",
+          "name": "MAX_P95_MS",
+          "value": "150"
+        },
+        {
+          "_class": "hudson.model.BooleanParameterValue",
+          "name": "FORCE_GATE_FAILURE",
+          "value": false
+        }
+      ]
+    },
+    {
+      "_class": "hudson.model.CauseAction",
+      "causes": [
+        {
+          "_class": "hudson.model.Cause$UserIdCause",
+          "shortDescription": "Started by user noorps",
+          "userId": "noorps",
+          "userName": "noorps"
+        }
+      ]
+    },
+    {
+      "_class": "hudson.plugins.git.util.BuildData",
+      "buildsByBranchName": {
+        "refs/remotes/origin/codex/jenkins-pipeline": {
+          "_class": "hudson.plugins.git.util.Build",
+          "buildNumber": 7,
+          "buildResult": null,
+          "marked": {
+            "SHA1": "a6d8c8699aaaf12f95eff36e83ec84015800bad3",
+            "branch": [
+              {
+                "SHA1": "a6d8c8699aaaf12f95eff36e83ec84015800bad3",
+                "name": "refs/remotes/origin/codex/jenkins-pipeline"
+              }
+            ]
+          },
+          "revision": {
+            "SHA1": "a6d8c8699aaaf12f95eff36e83ec84015800bad3",
+            "branch": [
+              {
+                "SHA1": "a6d8c8699aaaf12f95eff36e83ec84015800bad3",
+                "name": "refs/remotes/origin/codex/jenkins-pipeline"
+              }
+            ]
+          }
+        }
+      },
+      "lastBuiltRevision": {
+        "SHA1": "a6d8c8699aaaf12f95eff36e83ec84015800bad3",
+        "branch": [
+          {
+            "SHA1": "a6d8c8699aaaf12f95eff36e83ec84015800bad3",
+            "name": "refs/remotes/origin/codex/jenkins-pipeline"
+          }
+        ]
+      },
+      "remoteUrls": [
+        "file:///repo"
+      ],
+      "scmName": ""
+    },
+    {},
+    {
+      "_class": "org.jenkinsci.plugins.workflow.libs.LibrariesAction"
+    },
+    {},
+    {
+      "_class": "hudson.tasks.junit.TestResultAction",
+      "failCount": 0,
+      "skipCount": 0,
+      "totalCount": 3,
+      "urlName": "testReport"
+    },
+    {},
+    {},
+    {
+      "_class": "org.jenkinsci.plugins.displayurlapi.actions.RunDisplayAction"
+    },
+    {
+      "_class": "org.jenkinsci.plugins.pipeline.modeldefinition.actions.RestartDeclarativePipelineAction"
+    },
+    {},
+    {
+      "_class": "org.jenkinsci.plugins.workflow.job.views.FlowGraphAction"
+    },
+    {},
+    {}
+  ],
+  "artifacts": [
+    {
+      "displayPath": "compose.log",
+      "fileName": "compose.log",
+      "relativePath": "artifacts/compose.log"
+    },
+    {
+      "displayPath": "health.json",
+      "fileName": "health.json",
+      "relativePath": "artifacts/health.json"
+    },
+    {
+      "displayPath": "revision.txt",
+      "fileName": "revision.txt",
+      "relativePath": "artifacts/revision.txt"
+    },
+    {
+      "displayPath": "warmup.txt",
+      "fileName": "warmup.txt",
+      "relativePath": "artifacts/warmup.txt"
+    }
+  ],
+  "building": false,
+  "description": null,
+  "displayName": "#7",
+  "duration": 2497346,
+  "estimatedDuration": 876363,
+  "executor": null,
+  "fullDisplayName": "pulsegrid #7",
+  "id": "7",
+  "keepLog": false,
+  "number": 7,
+  "queueId": 12,
+  "result": "FAILURE",
+  "timestamp": 1792906461843,
+  "url": "http://localhost:8081/job/pulsegrid/7/",
+  "changeSets": [
+    {
+      "_class": "hudson.plugins.git.GitChangeSetList",
+      "items": [
+        {
+          "_class": "hudson.plugins.git.GitChangeSet",
+          "affectedPaths": [
+            "Jenkinsfile",
+            "tools/jenkins_benchmark.sh",
+            "ops/jenkins/stack.yml"
+          ],
+          "commitId": "a6d8c8699aaaf12f95eff36e83ec84015800bad3",
+          "timestamp": 1792906450000,
+          "author": {
+            "absoluteUrl": "http://localhost:8081/user/purnoorsharma",
+            "fullName": "purnoorsharma"
+          },
+          "authorEmail": "purnoorsharma@gmail.com",
+          "comment": "Define a fixed warmup and CPU profile for local benchmarks\n",
+          "date": "2026-10-25 00:34:10 -0500",
+          "id": "a6d8c8699aaaf12f95eff36e83ec84015800bad3",
+          "msg": "Define a fixed warmup and CPU profile for local benchmarks",
+          "paths": [
+            {
+              "editType": "edit",
+              "file": "Jenkinsfile"
+            },
+            {
+              "editType": "edit",
+              "file": "tools/jenkins_benchmark.sh"
+            },
+            {
+              "editType": "edit",
+              "file": "ops/jenkins/stack.yml"
+            }
+          ]
+        }
+      ],
+      "kind": "git"
+    }
+  ],
+  "culprits": [
+    {
+      "absoluteUrl": "http://localhost:8081/user/purnoorsharma",
+      "fullName": "purnoorsharma"
+    }
+  ],
+  "inProgress": false,
+  "nextBuild": null,
+  "previousBuild": {
+    "number": 6,
+    "url": "http://localhost:8081/job/pulsegrid/6/"
+  }
+}

@@ -1,0 +1,11 @@
+962637503ad9dc7ea01445c3e60da5ad94b3f87a Add declarative Jenkins pipeline and benchmark gate
+b1a4eaf2817ad719850777e2fe5c06d9d5091333 Add local Docker Jenkins environment and evidence capture
+dd5afba039a174ebed8fc3bcf3c125d60897fdf2 Document Jenkins setup thresholds and pending execution
+8758534eac8fb89085165d3290e10e486e2ae854 Trust the mounted Git directory for local Jenkins checkout
+723b6686fcfb7be6e6e043a8b4ce64cf5fedc703 Initialize gate parameters explicitly and warm the live service
+84b4c628ca72124b0f9ec732f3d4f2f373eaaa60 Run local Jenkins against the host Docker engine
+9871ee1d313ae20e029799eaefb99cd233bfec89 Benchmark directly on the application Docker network
+00716f811a5df193026b7ef4477721a4ea75370e Resolve the benchmark service address once per run
+a6d8c8699aaaf12f95eff36e83ec84015800bad3 Define a fixed warmup and CPU profile for local benchmarks
+db3f46b4fb8630dee6ec25cd3f61f898ac805e29 Wait for completed Jenkins consoles before exporting evidence
+1e0feac7b03fd59b82520dd9896de5d0a4aa5a7a Add temporary idle-sleep protection for Windows verification

@@ -1,0 +1,165 @@
+{
+  "_class": "org.jenkinsci.plugins.workflow.job.WorkflowRun",
+  "actions": [
+    {
+      "_class": "hudson.model.ParametersAction",
+      "parameters": [
+        {
+          "_class": "hudson.model.StringParameterValue",
+          "name": "MIN_EVENTS_PER_SEC",
+          "value": "750"
+        },
+        {
+          "_class": "hudson.model.StringParameterValue",
+          "name": "MAX_P95_MS",
+          "value": "150"
+        },
+        {
+          "_class": "hudson.model.BooleanParameterValue",
+          "name": "FORCE_GATE_FAILURE",
+          "value": false
+        }
+      ]
+    },
+    {
+      "_class": "hudson.model.CauseAction",
+      "causes": [
+        {
+          "_class": "hudson.model.Cause$UserIdCause",
+          "shortDescription": "Started by user noorps",
+          "userId": "noorps",
+          "userName": "noorps"
+        }
+      ]
+    },
+    {
+      "_class": "hudson.plugins.git.util.BuildData",
+      "buildsByBranchName": {
+        "refs/remotes/origin/codex/jenkins-pipeline": {
+          "_class": "hudson.plugins.git.util.Build",
+          "buildNumber": 5,
+          "buildResult": null,
+          "marked": {
+            "SHA1": "9871ee1d313ae20e029799eaefb99cd233bfec89",
+            "branch": [
+              {
+                "SHA1": "9871ee1d313ae20e029799eaefb99cd233bfec89",
+                "name": "refs/remotes/origin/codex/jenkins-pipeline"
+              }
+            ]
+          },
+          "revision": {
+            "SHA1": "9871ee1d313ae20e029799eaefb99cd233bfec89",
+            "branch": [
+              {
+                "SHA1": "9871ee1d313ae20e029799eaefb99cd233bfec89",
+                "name": "refs/remotes/origin/codex/jenkins-pipeline"
+              }
+            ]
+          }
+        }
+      },
+      "lastBuiltRevision": {
+        "SHA1": "9871ee1d313ae20e029799eaefb99cd233bfec89",
+        "branch": [
+          {
+            "SHA1": "9871ee1d313ae20e029799eaefb99cd233bfec89",
+            "name": "refs/remotes/origin/codex/jenkins-pipeline"
+          }
+        ]
+      },
+      "remoteUrls": [
+        "file:///repo"
+      ],
+      "scmName": ""
+    },
+    {},
+    {
+      "_class": "org.jenkinsci.plugins.workflow.libs.LibrariesAction"
+    },
+    {},
+    {
+      "_class": "hudson.tasks.junit.TestResultAction",
+      "failCount": 0,
+      "skipCount": 0,
+      "totalCount": 3,
+      "urlName": "testReport"
+    },
+    {},
+    {},
+    {
+      "_class": "org.jenkinsci.plugins.displayurlapi.actions.RunDisplayAction"
+    },
+    {
+      "_class": "org.jenkinsci.plugins.pipeline.modeldefinition.actions.RestartDeclarativePipelineAction"
+    },
+    {},
+    {},
+    {},
+    {
+      "_class": "org.jenkinsci.plugins.workflow.job.views.FlowGraphAction"
+    },
+    {},
+    {}
+  ],
+  "artifacts": [],
+  "building": true,
+  "description": null,
+  "displayName": "#5",
+  "duration": 0,
+  "estimatedDuration": 154787,
+  "executor": {
+    "_class": "hudson.model.OneOffExecutor"
+  },
+  "fullDisplayName": "pulsegrid #5",
+  "id": "5",
+  "keepLog": false,
+  "number": 5,
+  "queueId": 8,
+  "result": "FAILURE",
+  "timestamp": 1792905634997,
+  "url": "http://localhost:8081/job/pulsegrid/5/",
+  "changeSets": [
+    {
+      "_class": "hudson.plugins.git.GitChangeSetList",
+      "items": [
+        {
+          "_class": "hudson.plugins.git.GitChangeSet",
+          "affectedPaths": [
+            "Jenkinsfile"
+          ],
+          "commitId": "9871ee1d313ae20e029799eaefb99cd233bfec89",
+          "timestamp": 1792905620000,
+          "author": {
+            "absoluteUrl": "http://localhost:8081/user/purnoorsharma",
+            "fullName": "purnoorsharma"
+          },
+          "authorEmail": "purnoorsharma@gmail.com",
+          "comment": "Benchmark directly on the application Docker network\n",
+          "date": "2026-10-25 00:20:20 -0500",
+          "id": "9871ee1d313ae20e029799eaefb99cd233bfec89",
+          "msg": "Benchmark directly on the application Docker network",
+          "paths": [
+            {
+              "editType": "edit",
+              "file": "Jenkinsfile"
+            }
+          ]
+        }
+      ],
+      "kind": "git"
+    }
+  ],
+  "culprits": [
+    {
+      "absoluteUrl": "http://localhost:8081/user/purnoorsharma",
+      "fullName": "purnoorsharma"
+    }
+  ],
+  "inProgress": true,
+  "nextBuild": null,
+  "previousBuild": {
+    "number": 4,
+    "url": "http://localhost:8081/job/pulsegrid/4/"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "runs": [
+    {
+      "build": 8,
+      "result": "SUCCESS",
+      "source_revision": "a6d8c8699aaaf12f95eff36e83ec84015800bad3",
+      "console_matches_live_jenkins": true,
+      "console_sha256": "483fbf0243474839270200e8b705e2009a753a837920e503e8ecfeb3861913a2",
+      "gate": {
+        "passed": true,
+        "accepted": 10000,
+        "total": 10000,
+        "events_per_sec": 1392.0,
+        "p95_ms": 116.6,
+        "min_events_per_sec": 750.0,
+        "max_p95_ms": 150.0,
+        "failures": []
+      }
+    },
+    {
+      "build": 9,
+      "result": "FAILURE",
+      "source_revision": "a6d8c8699aaaf12f95eff36e83ec84015800bad3",
+      "console_matches_live_jenkins": true,
+      "console_sha256": "a8027bc49672f22de22a9a65c8533f8279ab03586bc27a298c8bdfd946bd2297",
+      "gate": {
+        "passed": false,
+        "accepted": 10000,
+        "total": 10000,
+        "events_per_sec": 1350.0,
+        "p95_ms": 117.0,
+        "min_events_per_sec": 1000000000000.0,
+        "max_p95_ms": 150.0,
+        "failures": [
+          "throughput 1350.0 < 1000000000000.0 events/sec"
+        ]
+      }
+    }
+  ],
+  "defaults": {
+    "MIN_EVENTS_PER_SEC": "750",
+    "MAX_P95_MS": "150",
+    "FORCE_GATE_FAILURE": false
+  }
+}
