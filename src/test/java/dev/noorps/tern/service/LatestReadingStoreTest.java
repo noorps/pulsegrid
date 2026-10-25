@@ -1,6 +1,6 @@
-package dev.noorps.pulsegrid.service;
+package dev.noorps.tern.service;
 
-import dev.noorps.pulsegrid.model.TelemetryEvent;
+import dev.noorps.tern.model.TelemetryEvent;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;

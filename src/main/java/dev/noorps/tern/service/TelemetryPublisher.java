@@ -1,6 +1,6 @@
-package dev.noorps.pulsegrid.service;
+package dev.noorps.tern.service;
 
-import dev.noorps.pulsegrid.model.TelemetryEvent;
+import dev.noorps.tern.model.TelemetryEvent;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,11 +19,11 @@ public class TelemetryPublisher {
     public TelemetryPublisher(
             KafkaTemplate<String, TelemetryEvent> kafka,
             MeterRegistry registry,
-            @Value("${pulsegrid.topics.telemetry}") String topic) {
+            @Value("${tern.topics.telemetry}") String topic) {
         this.kafka = kafka;
         this.topic = topic;
-        this.accepted = registry.counter("pulsegrid_ingest_total", "result", "accepted");
-        this.failed = registry.counter("pulsegrid_ingest_total", "result", "failed");
+        this.accepted = registry.counter("tern_ingest_total", "result", "accepted");
+        this.failed = registry.counter("tern_ingest_total", "result", "failed");
     }
 
     public CompletableFuture<Void> publish(TelemetryEvent event) {

@@ -2,7 +2,7 @@ global:
   scrape_interval: 5s
 
 scrape_configs:
-  - job_name: pulsegrid
+  - job_name: tern
     metrics_path: /actuator/prometheus
     static_configs:
       - targets: ["app:8080"]

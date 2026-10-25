@@ -1,6 +1,6 @@
 spring:
   application:
-    name: pulsegrid
+    name: tern
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     producer:
@@ -11,13 +11,13 @@ spring:
         enable.idempotence: true
         max.in.flight.requests.per.connection: 5
     consumer:
-      group-id: pulsegrid-materializer
+      group-id: tern-materializer
       auto-offset-reset: earliest
       enable-auto-commit: false
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.trusted.packages: dev.noorps.pulsegrid.model
+        spring.json.trusted.packages: dev.noorps.tern.model
     listener:
       ack-mode: record
 
@@ -34,7 +34,7 @@ management:
       probes:
         enabled: true
 
-pulsegrid:
+tern:
   api-keys: ${TENANT_API_KEYS:demo:demo-local-key}
   topics:
     telemetry: telemetry.events.v1

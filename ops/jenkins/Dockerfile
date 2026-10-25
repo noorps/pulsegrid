@@ -12,7 +12,7 @@ ENV MAVEN_HOME=/usr/share/maven
 ENV PATH=/usr/share/maven/bin:$PATH
 USER jenkins
 RUN jenkins-plugin-cli --plugins workflow-aggregator git junit
-COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/pulsegrid.groovy
+COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tern.groovy
 USER root
 RUN git config --system --add safe.directory /repo/.git
 USER jenkins

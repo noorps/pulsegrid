@@ -1,4 +1,4 @@
-package dev.noorps.pulsegrid.model;
+package dev.noorps.tern.model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

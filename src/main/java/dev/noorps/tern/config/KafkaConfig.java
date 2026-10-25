@@ -1,6 +1,6 @@
-package dev.noorps.pulsegrid.config;
+package dev.noorps.tern.config;
 
-import dev.noorps.pulsegrid.model.TelemetryEvent;
+import dev.noorps.tern.model.TelemetryEvent;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.common.TopicPartition;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,19 +16,19 @@ import org.springframework.util.backoff.ExponentialBackOff;
 @Configuration
 public class KafkaConfig {
     @Bean
-    NewTopic telemetryTopic(@Value("${pulsegrid.topics.telemetry}") String name) {
+    NewTopic telemetryTopic(@Value("${tern.topics.telemetry}") String name) {
         return new NewTopic(name, 6, (short) 1);
     }
 
     @Bean
-    NewTopic deadLetterTopic(@Value("${pulsegrid.topics.dead-letter}") String name) {
+    NewTopic deadLetterTopic(@Value("${tern.topics.dead-letter}") String name) {
         return new NewTopic(name, 6, (short) 1);
     }
 
     @Bean
     DefaultErrorHandler errorHandler(
             KafkaTemplate<Object, Object> template,
-            @Value("${pulsegrid.topics.dead-letter}") String deadLetterTopic) {
+            @Value("${tern.topics.dead-letter}") String deadLetterTopic) {
         ExponentialBackOff backOff = new ExponentialBackOff(200L, 2.0);
         backOff.setMaxInterval(2_000L);
         backOff.setMaxElapsedTime(6_000L);

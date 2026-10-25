@@ -39,7 +39,7 @@ def main():
             time.sleep(3)
         raise TimeoutError(f'Timed out waiting for {url}')
 
-    job_url = args.url.rstrip('/') + '/job/pulsegrid/'
+    job_url = args.url.rstrip('/') + '/job/tern/'
     deadline = time.monotonic() + 2400
     if args.build_number is None:
         body = urlencode({'MIN_EVENTS_PER_SEC': '750', 'MAX_P95_MS': '150',

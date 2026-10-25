@@ -1,4 +1,4 @@
-package dev.noorps.pulsegrid.security;
+package dev.noorps.tern.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class TenantGuard {
     private final Map<String, String> keysByTenant;
 
-    public TenantGuard(@Value("${pulsegrid.api-keys}") String configuredKeys) {
+    public TenantGuard(@Value("${tern.api-keys}") String configuredKeys) {
         this.keysByTenant = Arrays.stream(configuredKeys.split(","))
                 .map(pair -> pair.split(":", 2))
                 .filter(pair -> pair.length == 2)

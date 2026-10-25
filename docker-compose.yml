@@ -1,3 +1,4 @@
+name: tern
 services:
   kafka:
     image: apache/kafka:3.9.0

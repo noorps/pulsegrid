@@ -1,6 +1,6 @@
-package dev.noorps.pulsegrid.service;
+package dev.noorps.tern.service;
 
-import dev.noorps.pulsegrid.model.TelemetryEvent;
+import dev.noorps.tern.model.TelemetryEvent;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -14,11 +14,11 @@ public class TelemetryMaterializer {
 
     public TelemetryMaterializer(LatestReadingStore store, MeterRegistry registry) {
         this.store = store;
-        this.materialized = registry.counter("pulsegrid_materialized_total", "result", "stored");
-        this.duplicates = registry.counter("pulsegrid_materialized_total", "result", "duplicate");
+        this.materialized = registry.counter("tern_materialized_total", "result", "stored");
+        this.duplicates = registry.counter("tern_materialized_total", "result", "duplicate");
     }
 
-    @KafkaListener(topics = "${pulsegrid.topics.telemetry}")
+    @KafkaListener(topics = "${tern.topics.telemetry}")
     public void consume(TelemetryEvent event) {
         if (store.record(event)) {
             materialized.increment();

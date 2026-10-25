@@ -7,7 +7,7 @@ pipeline {
         booleanParam(name: 'INJECT_CPU_REGRESSION', defaultValue: false, description: 'Limit the warmed application to 0.25 CPU for a real regression test')
     }
     environment {
-        COMPOSE_PROJECT_NAME = 'pulsegrid-jenkins'
+        COMPOSE_PROJECT_NAME = 'tern-jenkins'
         COMPOSE_FILE = 'docker-compose.yml:ops/jenkins/stack.yml'
         BENCHMARK_BASE_URL = 'http://docker:8080'
         WARMUP_SECONDS = '120'

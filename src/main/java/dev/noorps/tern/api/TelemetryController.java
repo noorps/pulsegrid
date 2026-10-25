@@ -1,9 +1,9 @@
-package dev.noorps.pulsegrid.api;
+package dev.noorps.tern.api;
 
-import dev.noorps.pulsegrid.model.TelemetryEvent;
-import dev.noorps.pulsegrid.security.TenantGuard;
-import dev.noorps.pulsegrid.service.LatestReadingStore;
-import dev.noorps.pulsegrid.service.TelemetryPublisher;
+import dev.noorps.tern.model.TelemetryEvent;
+import dev.noorps.tern.security.TenantGuard;
+import dev.noorps.tern.service.LatestReadingStore;
+import dev.noorps.tern.service.TelemetryPublisher;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;

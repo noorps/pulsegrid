@@ -6,7 +6,7 @@ services:
     environment:
       JAVA_TOOL_OPTIONS: '-XX:ActiveProcessorCount=2'
   prometheus:
-    image: pulsegrid-jenkins-prometheus
+    image: tern-jenkins-prometheus
     build:
       context: .
       dockerfile: ops/jenkins/Prometheus.Dockerfile

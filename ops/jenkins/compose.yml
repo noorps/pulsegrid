@@ -1,11 +1,11 @@
-name: pulsegrid-ci
+name: tern-ci
 services:
   jenkins:
     build: .
     ports: ['127.0.0.1:8081:8080']
     environment:
       DOCKER_HOST: unix:///var/run/docker.sock
-      PULSEGRID_BRANCH: ${PULSEGRID_BRANCH:-main}
+      TERN_BRANCH: ${TERN_BRANCH:-main}
       JAVA_OPTS: '-Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true'
     volumes:
       - jenkins_home:/var/jenkins_home

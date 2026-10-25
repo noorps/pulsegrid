@@ -8,9 +8,9 @@
     <relativePath/>
   </parent>
   <groupId>dev.noorps</groupId>
-  <artifactId>pulsegrid</artifactId>
+  <artifactId>tern</artifactId>
   <version>0.1.0</version>
-  <name>pulsegrid</name>
+  <name>tern</name>
   <description>multi-tenant device telemetry platform</description>
   <properties>
     <java.version>21</java.version>
