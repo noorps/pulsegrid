@@ -10,7 +10,7 @@ public static class PulseGridPowerRequest {
 
 $deadline = (Get-Date).AddMinutes($Minutes)
 try {
-    # ES_CONTINUOUS | ES_SYSTEM_REQUIRED; no persistent power-plan changes.
+    # Keep the system awake until this process releases its power request.
     if ([PulseGridPowerRequest]::SetThreadExecutionState([uint32]2147483649) -eq 0) {
         throw 'Could not request temporary idle-sleep prevention'
     }

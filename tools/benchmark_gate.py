@@ -1,4 +1,4 @@
-"""Fail closed on incomplete benchmark output or a missed performance budget."""
+"""Check accepted readings, throughput and p95 against the benchmark budget."""
 
 import argparse
 import json

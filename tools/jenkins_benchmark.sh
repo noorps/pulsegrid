@@ -1,8 +1,7 @@
 #!/bin/sh
 set -eu
 
-# Pin the current service address in /etc/hosts so each HTTP request does not
-# benchmark Docker's DNS resolver. The app stays on the same Compose network.
+# Resolve the service once to keep Docker DNS latency out of the HTTP sample.
 app_id="$(docker compose ps -q app)"
 app_ip="$(docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$app_id")"
 test -n "$app_ip"
