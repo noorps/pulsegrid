@@ -113,6 +113,11 @@ Cleanup removes the limited container; the next normal run starts unrestricted.
 `FORCE_GATE_FAILURE` remains available as a threshold-wiring test; the CPU-limited
 run is the regression evidence. Use `--build-number N` to export a completed run.
 
+The recorded CPU-regression run accepted 10,000/10,000 readings at **154 events/sec
+and 693.3 ms p95** and made Jenkins finish **FAILURE** at the normal thresholds.
+The earlier passing run and later unrestricted budget miss are also retained in
+[the evidence](docs/jenkins/README.md).
+
 Windows only: `tools/local-dev/keep-awake.ps1` temporarily prevents idle sleep while local builds run.
 
 Stop Jenkins without deleting its history:

@@ -1,0 +1,40 @@
+warmup batch 1 (excluded from the measured benchmark)
+accepted: 10000/10000
+throughput: 667 events/sec
+p50 latency: 80.1 ms
+p95 latency: 171.6 ms
+warmup batch 2 (excluded from the measured benchmark)
+accepted: 10000/10000
+throughput: 688 events/sec
+p50 latency: 78.8 ms
+p95 latency: 196.2 ms
+warmup batch 3 (excluded from the measured benchmark)
+accepted: 10000/10000
+throughput: 723 events/sec
+p50 latency: 72.9 ms
+p95 latency: 190.2 ms
+warmup batch 4 (excluded from the measured benchmark)
+accepted: 10000/10000
+throughput: 677 events/sec
+p50 latency: 76.3 ms
+p95 latency: 205.2 ms
+warmup batch 5 (excluded from the measured benchmark)
+accepted: 10000/10000
+throughput: 776 events/sec
+p50 latency: 60.3 ms
+p95 latency: 195.8 ms
+warmup batch 6 (excluded from the measured benchmark)
+accepted: 10000/10000
+throughput: 628 events/sec
+p50 latency: 37.8 ms
+p95 latency: 191.8 ms
+warmup batch 7 (excluded from the measured benchmark)
+accepted: 10000/10000
+throughput: 737 events/sec
+p50 latency: 67.7 ms
+p95 latency: 191.2 ms
+warmup batch 8 (excluded from the measured benchmark)
+accepted: 10000/10000
+throughput: 777 events/sec
+p50 latency: 57.7 ms
+p95 latency: 201.5 ms

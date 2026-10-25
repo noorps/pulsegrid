@@ -1,0 +1,63 @@
+{
+  "checked_utc": "2026-10-25T07:07:08.020111+00:00",
+  "runs": [
+    {
+      "build": 10,
+      "source_revision": "93fdbf45625a8d65132e2753efeded29b508b459",
+      "result": "FAILURE",
+      "console_matches_live_jenkins": true,
+      "parameters": {
+        "MIN_EVENTS_PER_SEC": "750",
+        "MAX_P95_MS": "150",
+        "FORCE_GATE_FAILURE": false
+      },
+      "gate": {
+        "passed": false,
+        "accepted": 10000,
+        "total": 10000,
+        "events_per_sec": 805.0,
+        "p95_ms": 186.7,
+        "min_events_per_sec": 750.0,
+        "max_p95_ms": 150.0,
+        "failures": [
+          "p95 186.7 > 150.0 ms"
+        ]
+      },
+      "console_sha256": "c067c3dfb3e6fad17ad9a32dc1138221a686aeb6b5ea35206dbc677ea004d73b"
+    },
+    {
+      "build": 11,
+      "source_revision": "93fdbf45625a8d65132e2753efeded29b508b459",
+      "result": "FAILURE",
+      "console_matches_live_jenkins": true,
+      "parameters": {
+        "MIN_EVENTS_PER_SEC": "750",
+        "MAX_P95_MS": "150",
+        "FORCE_GATE_FAILURE": false,
+        "INJECT_CPU_REGRESSION": true
+      },
+      "gate": {
+        "passed": false,
+        "accepted": 10000,
+        "total": 10000,
+        "events_per_sec": 154.0,
+        "p95_ms": 693.3,
+        "min_events_per_sec": 750.0,
+        "max_p95_ms": 150.0,
+        "failures": [
+          "throughput 154.0 < 750.0 events/sec",
+          "p95 693.3 > 150.0 ms"
+        ]
+      },
+      "console_sha256": "b06fdf0b2da95d5f05fdcd14fac69c3e22a5f43a7ba4ba91e8dfeda7d3c4fba7"
+    }
+  ],
+  "defaults": {
+    "MIN_EVENTS_PER_SEC": "750",
+    "MAX_P95_MS": "150",
+    "FORCE_GATE_FAILURE": false,
+    "INJECT_CPU_REGRESSION": false
+  },
+  "remaining_application_containers": [],
+  "remaining_benchmark_containers": []
+}

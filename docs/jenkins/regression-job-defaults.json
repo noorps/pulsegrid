@@ -1,0 +1,48 @@
+{
+  "_class": "org.jenkinsci.plugins.workflow.job.WorkflowJob",
+  "property": [
+    {
+      "_class": "jenkins.model.BuildDiscarderProperty"
+    },
+    {
+      "_class": "org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty"
+    },
+    {
+      "_class": "hudson.model.ParametersDefinitionProperty",
+      "parameterDefinitions": [
+        {
+          "_class": "hudson.model.StringParameterDefinition",
+          "defaultParameterValue": {
+            "_class": "hudson.model.StringParameterValue",
+            "value": "750"
+          },
+          "name": "MIN_EVENTS_PER_SEC"
+        },
+        {
+          "_class": "hudson.model.StringParameterDefinition",
+          "defaultParameterValue": {
+            "_class": "hudson.model.StringParameterValue",
+            "value": "150"
+          },
+          "name": "MAX_P95_MS"
+        },
+        {
+          "_class": "hudson.model.BooleanParameterDefinition",
+          "defaultParameterValue": {
+            "_class": "hudson.model.BooleanParameterValue",
+            "value": false
+          },
+          "name": "FORCE_GATE_FAILURE"
+        },
+        {
+          "_class": "hudson.model.BooleanParameterDefinition",
+          "defaultParameterValue": {
+            "_class": "hudson.model.BooleanParameterValue",
+            "value": false
+          },
+          "name": "INJECT_CPU_REGRESSION"
+        }
+      ]
+    }
+  ]
+}

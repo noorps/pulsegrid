@@ -1,0 +1,592 @@
+{
+  "_class": "org.jenkinsci.plugins.workflow.job.WorkflowRun",
+  "actions": [
+    {
+      "_class": "hudson.model.ParametersAction",
+      "parameters": [
+        {
+          "_class": "hudson.model.StringParameterValue",
+          "name": "MIN_EVENTS_PER_SEC",
+          "value": "750"
+        },
+        {
+          "_class": "hudson.model.StringParameterValue",
+          "name": "MAX_P95_MS",
+          "value": "150"
+        },
+        {
+          "_class": "hudson.model.BooleanParameterValue",
+          "name": "FORCE_GATE_FAILURE",
+          "value": false
+        }
+      ]
+    },
+    {
+      "_class": "hudson.model.CauseAction",
+      "causes": [
+        {
+          "_class": "hudson.model.Cause$UserIdCause",
+          "shortDescription": "Started by user noorps",
+          "userId": "noorps",
+          "userName": "noorps"
+        }
+      ]
+    },
+    {
+      "_class": "hudson.plugins.git.util.BuildData",
+      "buildsByBranchName": {
+        "refs/remotes/origin/codex/jenkins-pipeline": {
+          "_class": "hudson.plugins.git.util.Build",
+          "buildNumber": 10,
+          "buildResult": null,
+          "marked": {
+            "SHA1": "93fdbf45625a8d65132e2753efeded29b508b459",
+            "branch": [
+              {
+                "SHA1": "93fdbf45625a8d65132e2753efeded29b508b459",
+                "name": "refs/remotes/origin/codex/jenkins-pipeline"
+              }
+            ]
+          },
+          "revision": {
+            "SHA1": "93fdbf45625a8d65132e2753efeded29b508b459",
+            "branch": [
+              {
+                "SHA1": "93fdbf45625a8d65132e2753efeded29b508b459",
+                "name": "refs/remotes/origin/codex/jenkins-pipeline"
+              }
+            ]
+          }
+        }
+      },
+      "lastBuiltRevision": {
+        "SHA1": "93fdbf45625a8d65132e2753efeded29b508b459",
+        "branch": [
+          {
+            "SHA1": "93fdbf45625a8d65132e2753efeded29b508b459",
+            "name": "refs/remotes/origin/codex/jenkins-pipeline"
+          }
+        ]
+      },
+      "remoteUrls": [
+        "file:///repo"
+      ],
+      "scmName": ""
+    },
+    {},
+    {
+      "_class": "org.jenkinsci.plugins.workflow.libs.LibrariesAction"
+    },
+    {},
+    {
+      "_class": "hudson.tasks.junit.TestResultAction",
+      "failCount": 0,
+      "skipCount": 0,
+      "totalCount": 3,
+      "urlName": "testReport"
+    },
+    {},
+    {},
+    {
+      "_class": "org.jenkinsci.plugins.displayurlapi.actions.RunDisplayAction"
+    },
+    {
+      "_class": "org.jenkinsci.plugins.pipeline.modeldefinition.actions.RestartDeclarativePipelineAction"
+    },
+    {},
+    {
+      "_class": "org.jenkinsci.plugins.workflow.job.views.FlowGraphAction"
+    },
+    {},
+    {}
+  ],
+  "artifacts": [
+    {
+      "displayPath": "benchmark.txt",
+      "fileName": "benchmark.txt",
+      "relativePath": "artifacts/benchmark.txt"
+    },
+    {
+      "displayPath": "compose.log",
+      "fileName": "compose.log",
+      "relativePath": "artifacts/compose.log"
+    },
+    {
+      "displayPath": "gate.json",
+      "fileName": "gate.json",
+      "relativePath": "artifacts/gate.json"
+    },
+    {
+      "displayPath": "health.json",
+      "fileName": "health.json",
+      "relativePath": "artifacts/health.json"
+    },
+    {
+      "displayPath": "revision.txt",
+      "fileName": "revision.txt",
+      "relativePath": "artifacts/revision.txt"
+    },
+    {
+      "displayPath": "warmup.txt",
+      "fileName": "warmup.txt",
+      "relativePath": "artifacts/warmup.txt"
+    }
+  ],
+  "building": false,
+  "description": null,
+  "displayName": "#10",
+  "duration": 230347,
+  "estimatedDuration": 191686,
+  "executor": null,
+  "fullDisplayName": "pulsegrid #10",
+  "id": "10",
+  "keepLog": false,
+  "number": 10,
+  "queueId": 18,
+  "result": "FAILURE",
+  "timestamp": 1792911415078,
+  "url": "http://localhost:8081/job/pulsegrid/10/",
+  "changeSets": [
+    {
+      "_class": "hudson.plugins.git.GitChangeSetList",
+      "items": [
+        {
+          "_class": "hudson.plugins.git.GitChangeSet",
+          "affectedPaths": [
+            "ops/jenkins/capture_run.py"
+          ],
+          "commitId": "db3f46b4fb8630dee6ec25cd3f61f898ac805e29",
+          "timestamp": 1792909745000,
+          "author": {
+            "absoluteUrl": "http://localhost:8081/user/purnoorsharma",
+            "fullName": "purnoorsharma"
+          },
+          "authorEmail": "purnoorsharma@gmail.com",
+          "comment": "Wait for completed Jenkins consoles before exporting evidence\n",
+          "date": "2026-10-25 01:29:05 -0500",
+          "id": "db3f46b4fb8630dee6ec25cd3f61f898ac805e29",
+          "msg": "Wait for completed Jenkins consoles before exporting evidence",
+          "paths": [
+            {
+              "editType": "edit",
+              "file": "ops/jenkins/capture_run.py"
+            }
+          ]
+        },
+        {
+          "_class": "hudson.plugins.git.GitChangeSet",
+          "affectedPaths": [
+            "ops/jenkins/keep-awake.ps1"
+          ],
+          "commitId": "1e0feac7b03fd59b82520dd9896de5d0a4aa5a7a",
+          "timestamp": 1792909745000,
+          "author": {
+            "absoluteUrl": "http://localhost:8081/user/purnoorsharma",
+            "fullName": "purnoorsharma"
+          },
+          "authorEmail": "purnoorsharma@gmail.com",
+          "comment": "Add temporary idle-sleep protection for Windows verification\n",
+          "date": "2026-10-25 01:29:05 -0500",
+          "id": "1e0feac7b03fd59b82520dd9896de5d0a4aa5a7a",
+          "msg": "Add temporary idle-sleep protection for Windows verification",
+          "paths": [
+            {
+              "editType": "add",
+              "file": "ops/jenkins/keep-awake.ps1"
+            }
+          ]
+        },
+        {
+          "_class": "hudson.plugins.git.GitChangeSet",
+          "affectedPaths": [
+            "docs/jenkins/build-5-warmup.txt",
+            "docs/jenkins/build-5-benchmark.txt",
+            "docs/jenkins/SHA256SUMS",
+            "docs/jenkins/attempt-5-failure.json",
+            "docs/jenkins/job-defaults.json",
+            ".gitattributes",
+            "docs/jenkins/attempt-3-failure.json",
+            "docs/jenkins/build-8-gate.json",
+            "docs/jenkins/docker-host.json",
+            "docs/jenkins/green-8-success.json",
+            "docs/jenkins/build-8-health.json",
+            "docs/jenkins/build-9-health.json",
+            "docs/jenkins/build-5-gate.json",
+            "docs/jenkins/attempt-7-failure.log",
+            "docs/jenkins/gate-failed-9-failure.json",
+            "docs/jenkins/attempt-5-failure.log",
+            "docs/jenkins/build-6-health.json",
+            "docs/jenkins/build-9-benchmark.txt",
+            "docs/jenkins/attempt-6-failure.log",
+            "docs/jenkins/attempt-3-failure.log",
+            "docs/jenkins/green-8-success.log",
+            "docs/jenkins/attempt-7-failure.json",
+            "docs/jenkins/build-7-health.json",
+            "docs/jenkins/build-5-revision.txt",
+            "docs/jenkins/build-4-revision.txt",
+            "docs/jenkins/build-9-gate.json",
+            "docs/jenkins/build-3-revision.txt",
+            "docs/jenkins/build-6-benchmark.txt",
+            "README.md",
+            "docs/jenkins/build-6-gate.json",
+            "docs/jenkins/build-8-warmup.txt",
+            "docs/jenkins/attempt-4-aborted.json",
+            "docs/jenkins/attempt-6-failure.json",
+            "docs/jenkins/verification.json",
+            "docs/jenkins/build-3-gate.json",
+            "docs/jenkins/attempt-4-aborted.log",
+            "docs/jenkins/build-9-warmup.txt",
+            "docs/jenkins/implementation-commits.txt",
+            "docs/jenkins/build-6-warmup.txt",
+            "docs/jenkins/runtime-images.json",
+            "docs/jenkins/docker-version.json",
+            "docs/jenkins/build-6-revision.txt",
+            "docs/jenkins/build-7-revision.txt",
+            "docs/jenkins/build-4-benchmark.txt",
+            "docs/jenkins/build-8-revision.txt",
+            "docs/jenkins/build-4-health.json",
+            "docs/jenkins/build-5-health.json",
+            "docs/jenkins/build-9-revision.txt",
+            "docs/jenkins/build-3-health.json",
+            "docs/jenkins/cleanup-after-runs.json",
+            "docs/jenkins/build-8-benchmark.txt",
+            "docs/jenkins/README.md",
+            "docs/jenkins/build-4-warmup.txt",
+            "docs/jenkins/gate-failed-9-failure.log",
+            "docs/jenkins/build-3-benchmark.txt"
+          ],
+          "commitId": "d2583e96657cba7eb85529938c9c7ed45baa6bc0",
+          "timestamp": 1792909806000,
+          "author": {
+            "absoluteUrl": "http://localhost:8081/user/purnoorsharma",
+            "fullName": "purnoorsharma"
+          },
+          "authorEmail": "purnoorsharma@gmail.com",
+          "comment": "Record real Jenkins success and deliberate gate failure evidence\n",
+          "date": "2026-10-25 01:30:06 -0500",
+          "id": "d2583e96657cba7eb85529938c9c7ed45baa6bc0",
+          "msg": "Record real Jenkins success and deliberate gate failure evidence",
+          "paths": [
+            {
+              "editType": "add",
+              "file": "docs/jenkins/attempt-6-failure.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/attempt-4-aborted.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/attempt-7-failure.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-5-gate.json"
+            },
+            {
+              "editType": "edit",
+              "file": "README.md"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/attempt-3-failure.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/docker-host.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-4-health.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-6-revision.txt"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-8-warmup.txt"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-6-gate.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/implementation-commits.txt"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/attempt-7-failure.log"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-5-revision.txt"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/attempt-5-failure.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-7-revision.txt"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/gate-failed-9-failure.log"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-3-benchmark.txt"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-5-health.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/verification.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-9-warmup.txt"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-3-gate.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-8-revision.txt"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-8-gate.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-8-benchmark.txt"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-9-benchmark.txt"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-9-revision.txt"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-3-health.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-3-revision.txt"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/SHA256SUMS"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/green-8-success.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-5-benchmark.txt"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-9-gate.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/cleanup-after-runs.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/attempt-3-failure.log"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/green-8-success.log"
+            },
+            {
+              "editType": "edit",
+              "file": "docs/jenkins/README.md"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-7-health.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-8-health.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/runtime-images.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/gate-failed-9-failure.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-9-health.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-6-warmup.txt"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-4-benchmark.txt"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-6-benchmark.txt"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-4-warmup.txt"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/attempt-4-aborted.log"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/attempt-5-failure.log"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/job-defaults.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-4-revision.txt"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/attempt-6-failure.log"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-6-health.json"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/build-5-warmup.txt"
+            },
+            {
+              "editType": "add",
+              "file": ".gitattributes"
+            },
+            {
+              "editType": "add",
+              "file": "docs/jenkins/docker-version.json"
+            }
+          ]
+        },
+        {
+          "_class": "hudson.plugins.git.GitChangeSet",
+          "affectedPaths": [
+            "ops/jenkins/init.groovy",
+            "tools/local-dev/keep-awake.ps1",
+            "tools/jenkins_benchmark.sh",
+            "tools/benchmark_gate.py",
+            "ops/jenkins/keep-awake.ps1",
+            "ops/jenkins/stack.yml",
+            "ops/jenkins/compose.yml"
+          ],
+          "commitId": "58a9f06461ce6ca662fa970b42956dbc593ed3c9",
+          "timestamp": 1792911350000,
+          "author": {
+            "absoluteUrl": "http://localhost:8081/user/purnoorsharma",
+            "fullName": "purnoorsharma"
+          },
+          "authorEmail": "purnoorsharma@gmail.com",
+          "comment": "Clarify runtime comments and organize the local development helper\n",
+          "date": "2026-10-25 01:55:50 -0500",
+          "id": "58a9f06461ce6ca662fa970b42956dbc593ed3c9",
+          "msg": "Clarify runtime comments and organize the local development helper",
+          "paths": [
+            {
+              "editType": "edit",
+              "file": "ops/jenkins/compose.yml"
+            },
+            {
+              "editType": "edit",
+              "file": "ops/jenkins/stack.yml"
+            },
+            {
+              "editType": "edit",
+              "file": "tools/benchmark_gate.py"
+            },
+            {
+              "editType": "edit",
+              "file": "ops/jenkins/init.groovy"
+            },
+            {
+              "editType": "edit",
+              "file": "tools/jenkins_benchmark.sh"
+            },
+            {
+              "editType": "add",
+              "file": "tools/local-dev/keep-awake.ps1"
+            },
+            {
+              "editType": "delete",
+              "file": "ops/jenkins/keep-awake.ps1"
+            }
+          ]
+        },
+        {
+          "_class": "hudson.plugins.git.GitChangeSet",
+          "affectedPaths": [
+            "ops/jenkins/capture_run.py",
+            "Jenkinsfile"
+          ],
+          "commitId": "93fdbf45625a8d65132e2753efeded29b508b459",
+          "timestamp": 1792911351000,
+          "author": {
+            "absoluteUrl": "http://localhost:8081/user/purnoorsharma",
+            "fullName": "purnoorsharma"
+          },
+          "authorEmail": "purnoorsharma@gmail.com",
+          "comment": "Exercise normal performance gates with a CPU-limited service\n",
+          "date": "2026-10-25 01:55:51 -0500",
+          "id": "93fdbf45625a8d65132e2753efeded29b508b459",
+          "msg": "Exercise normal performance gates with a CPU-limited service",
+          "paths": [
+            {
+              "editType": "edit",
+              "file": "ops/jenkins/capture_run.py"
+            },
+            {
+              "editType": "edit",
+              "file": "Jenkinsfile"
+            }
+          ]
+        }
+      ],
+      "kind": "git"
+    }
+  ],
+  "culprits": [
+    {
+      "absoluteUrl": "http://localhost:8081/user/purnoorsharma",
+      "fullName": "purnoorsharma"
+    }
+  ],
+  "inProgress": false,
+  "nextBuild": {
+    "number": 11,
+    "url": "http://localhost:8081/job/pulsegrid/11/"
+  },
+  "previousBuild": {
+    "number": 9,
+    "url": "http://localhost:8081/job/pulsegrid/9/"
+  }
+}

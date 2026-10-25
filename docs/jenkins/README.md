@@ -1,27 +1,47 @@
 # Verified local Jenkins runs
 
-Executed October 25, 2026 on Docker Desktop's Linux engine. Both primary runs
-checked out source `a6d8c8699aaaf12f95eff36e83ec84015800bad3`.
+Executed October 25, 2026 on Docker Desktop's Linux engine. Passing build 8 used
+source `a6d8c8699aaaf12f95eff36e83ec84015800bad3`. The new baseline (10) and
+real CPU-regression run (11) both used `93fdbf45625a8d65132e2753efeded29b508b459`.
 
 | Build | Accepted | Throughput | p50 | p95 | Effective gate | Jenkins result |
 | --- | --- | --- | --- | --- | --- | --- |
 | [8](green-8-success.log) | 10,000/10,000 | 1,392 events/sec | 34.7 ms | 116.6 ms | >=750 events/sec, <=150 ms p95 | **SUCCESS** |
-| [9](gate-failed-9-failure.log) | 10,000/10,000 | 1,350 events/sec | 36.1 ms | 117.0 ms | >=1,000,000,000,000 events/sec, <=150 ms p95 | **FAILURE** |
+| [10](attempt-10-failure.log), unrestricted | 10,000/10,000 | 805 events/sec | 59.2 ms | 186.7 ms | >=750 events/sec, <=150 ms p95 | **FAILURE: p95** |
+| [11](regression-11-failure.log), application limited to 0.25 CPU | 10,000/10,000 | 154 events/sec | 396.8 ms | 693.3 ms | >=750 events/sec, <=150 ms p95 | **FAILURE: throughput and p95** |
 
-Build 9 set `FORCE_GATE_FAILURE=true` for that build only. Its only rejected
-condition was throughput below the intentionally impossible test threshold.
-The console records `ERROR: script returned exit code 1` and `Finished: FAILURE`.
-Publish was skipped; the always block archived results and removed the stack.
-The normal gate remains **750 events/sec minimum, 150 ms p95 maximum, and exactly
-10,000/10,000 accepted**. [job-defaults.json](job-defaults.json) confirms defaults
-remain 750/150 and `FORCE_GATE_FAILURE=false`; no broken source change needs reverting.
+**Build 11 is the real regression evidence.** `INJECT_CPU_REGRESSION=true` applies
+`docker update --cpus 0.25` to the healthy application after warmup. Docker recorded
+`NanoCpus=250000000`; the live cgroup reported `25000 100000`, with observed usage
+around 22% of one CPU. `FORCE_GATE_FAILURE` was false. The gate rejected actual
+154 events/sec throughput and 693.3 ms p95 at the unchanged **750/150** thresholds.
+Jenkins recorded `ERROR: script returned exit code 1` and `Finished: FAILURE`.
+The always block archived results and removed the limited container and stack.
+
+The same-source unrestricted baseline also missed p95, so this laptop does not
+consistently meet the budget. Limiting the service reduced throughput from 805
+to 154 events/sec and raised p95 from 186.7 to 693.3 ms. Both accepted all 10,000
+readings. The earlier passing run remains separate evidence, not a claim that
+every local run passes. [regression-job-defaults.json](regression-job-defaults.json)
+confirms normal thresholds remain 750/150 and both injection flags default to false.
+
+Legacy [build 9](gate-failed-9-failure.log) used the artificial 1e12 threshold only
+to test gate wiring. Its 1,350 events/sec and 117.0 ms p95 were within normal
+budgets. That log remains historical evidence; use build 11 for a measured regression.
 
 ## Evidence and integrity
 
 - [Successful full console](green-8-success.log) and [Jenkins metadata](green-8-success.json).
 - [Deliberately failed full console](gate-failed-9-failure.log) and [Jenkins metadata](gate-failed-9-failure.json).
+- [Real CPU-regression console](regression-11-failure.log) and [Jenkins metadata](regression-11-failure.json).
+- [Normal-threshold rejection](build-11-gate.json), [Docker CPU configuration](build-11-regression.json),
+  and [live CPU quota/usage](build-11-live-cpu.json) show the injected service slowdown.
+- [regression-verification.json](regression-verification.json) verifies matching
+  complete console bytes, unchanged thresholds, injection parameters, identical
+  source for builds 10/11, and zero leftover application or benchmark containers.
 - [Successful gate JSON](build-8-gate.json) and [failed gate JSON](build-9-gate.json).
-- Raw benchmark, warmup, health and source-revision artifacts are named `build-8-*` and `build-9-*`.
+- Raw benchmark, warmup, health and source-revision artifacts are named `build-8-*`,
+  `build-9-*`, `build-10-*` and `build-11-*`.
 - [verification.json](verification.json) records terminal results, the same tested
   revision, gate decisions, unchanged defaults, and byte-for-byte console matches
   against completed Jenkins `consoleText` responses.
@@ -39,6 +59,7 @@ still running. Existing completed runs can be exported again without running the
 ```bash
 python ops/jenkins/capture_run.py --build-number 8
 python ops/jenkins/capture_run.py --build-number 9 --force-gate-failure
+python ops/jenkins/capture_run.py --build-number 11 --inject-cpu-regression
 ```
 
 ## Why the two published measurements differ
