@@ -1,0 +1,210 @@
+{
+  "_class": "org.jenkinsci.plugins.workflow.job.WorkflowRun",
+  "actions": [
+    {
+      "_class": "hudson.model.ParametersAction",
+      "parameters": [
+        {
+          "_class": "hudson.model.StringParameterValue",
+          "name": "MIN_EVENTS_PER_SEC",
+          "value": "750"
+        },
+        {
+          "_class": "hudson.model.StringParameterValue",
+          "name": "MAX_P95_MS",
+          "value": "150"
+        },
+        {
+          "_class": "hudson.model.BooleanParameterValue",
+          "name": "FORCE_GATE_FAILURE",
+          "value": false
+        }
+      ]
+    },
+    {
+      "_class": "hudson.model.CauseAction",
+      "causes": [
+        {
+          "_class": "hudson.model.Cause$UserIdCause",
+          "shortDescription": "Started by user noorps",
+          "userId": "noorps",
+          "userName": "noorps"
+        }
+      ]
+    },
+    {
+      "_class": "hudson.plugins.git.util.BuildData",
+      "buildsByBranchName": {
+        "refs/remotes/origin/codex/jenkins-pipeline": {
+          "_class": "hudson.plugins.git.util.Build",
+          "buildNumber": 4,
+          "buildResult": null,
+          "marked": {
+            "SHA1": "84b4c628ca72124b0f9ec732f3d4f2f373eaaa60",
+            "branch": [
+              {
+                "SHA1": "84b4c628ca72124b0f9ec732f3d4f2f373eaaa60",
+                "name": "refs/remotes/origin/codex/jenkins-pipeline"
+              }
+            ]
+          },
+          "revision": {
+            "SHA1": "84b4c628ca72124b0f9ec732f3d4f2f373eaaa60",
+            "branch": [
+              {
+                "SHA1": "84b4c628ca72124b0f9ec732f3d4f2f373eaaa60",
+                "name": "refs/remotes/origin/codex/jenkins-pipeline"
+              }
+            ]
+          }
+        }
+      },
+      "lastBuiltRevision": {
+        "SHA1": "84b4c628ca72124b0f9ec732f3d4f2f373eaaa60",
+        "branch": [
+          {
+            "SHA1": "84b4c628ca72124b0f9ec732f3d4f2f373eaaa60",
+            "name": "refs/remotes/origin/codex/jenkins-pipeline"
+          }
+        ]
+      },
+      "remoteUrls": [
+        "file:///repo"
+      ],
+      "scmName": ""
+    },
+    {},
+    {
+      "_class": "org.jenkinsci.plugins.workflow.libs.LibrariesAction"
+    },
+    {},
+    {
+      "_class": "hudson.tasks.junit.TestResultAction",
+      "failCount": 0,
+      "skipCount": 0,
+      "totalCount": 3,
+      "urlName": "testReport"
+    },
+    {
+      "_class": "jenkins.model.InterruptedBuildAction"
+    },
+    {},
+    {},
+    {
+      "_class": "org.jenkinsci.plugins.displayurlapi.actions.RunDisplayAction"
+    },
+    {
+      "_class": "org.jenkinsci.plugins.pipeline.modeldefinition.actions.RestartDeclarativePipelineAction"
+    },
+    {},
+    {
+      "_class": "org.jenkinsci.plugins.workflow.job.views.FlowGraphAction"
+    },
+    {},
+    {}
+  ],
+  "artifacts": [
+    {
+      "displayPath": "benchmark.txt",
+      "fileName": "benchmark.txt",
+      "relativePath": "artifacts/benchmark.txt"
+    },
+    {
+      "displayPath": "compose.log",
+      "fileName": "compose.log",
+      "relativePath": "artifacts/compose.log"
+    },
+    {
+      "displayPath": "health.json",
+      "fileName": "health.json",
+      "relativePath": "artifacts/health.json"
+    },
+    {
+      "displayPath": "revision.txt",
+      "fileName": "revision.txt",
+      "relativePath": "artifacts/revision.txt"
+    },
+    {
+      "displayPath": "warmup.txt",
+      "fileName": "warmup.txt",
+      "relativePath": "artifacts/warmup.txt"
+    }
+  ],
+  "building": false,
+  "description": null,
+  "displayName": "#4",
+  "duration": 343515,
+  "estimatedDuration": 154787,
+  "executor": null,
+  "fullDisplayName": "pulsegrid #4",
+  "id": "4",
+  "keepLog": false,
+  "number": 4,
+  "queueId": 6,
+  "result": "ABORTED",
+  "timestamp": 1792905245007,
+  "url": "http://localhost:8081/job/pulsegrid/4/",
+  "changeSets": [
+    {
+      "_class": "hudson.plugins.git.GitChangeSetList",
+      "items": [
+        {
+          "_class": "hudson.plugins.git.GitChangeSet",
+          "affectedPaths": [
+            "Jenkinsfile",
+            "ops/jenkins/stack.yml",
+            "ops/jenkins/capture_run.py",
+            "ops/jenkins/compose.yml",
+            "ops/jenkins/Prometheus.Dockerfile"
+          ],
+          "commitId": "84b4c628ca72124b0f9ec732f3d4f2f373eaaa60",
+          "timestamp": 1792905204000,
+          "author": {
+            "absoluteUrl": "http://localhost:8081/user/purnoorsharma",
+            "fullName": "purnoorsharma"
+          },
+          "authorEmail": "purnoorsharma@gmail.com",
+          "comment": "Run local Jenkins against the host Docker engine\n",
+          "date": "2026-10-25 00:13:24 -0500",
+          "id": "84b4c628ca72124b0f9ec732f3d4f2f373eaaa60",
+          "msg": "Run local Jenkins against the host Docker engine",
+          "paths": [
+            {
+              "editType": "edit",
+              "file": "ops/jenkins/compose.yml"
+            },
+            {
+              "editType": "edit",
+              "file": "ops/jenkins/capture_run.py"
+            },
+            {
+              "editType": "add",
+              "file": "ops/jenkins/stack.yml"
+            },
+            {
+              "editType": "edit",
+              "file": "Jenkinsfile"
+            },
+            {
+              "editType": "add",
+              "file": "ops/jenkins/Prometheus.Dockerfile"
+            }
+          ]
+        }
+      ],
+      "kind": "git"
+    }
+  ],
+  "culprits": [
+    {
+      "absoluteUrl": "http://localhost:8081/user/purnoorsharma",
+      "fullName": "purnoorsharma"
+    }
+  ],
+  "inProgress": false,
+  "nextBuild": null,
+  "previousBuild": {
+    "number": 3,
+    "url": "http://localhost:8081/job/pulsegrid/3/"
+  }
+}

@@ -64,6 +64,68 @@ python tools/load_test.py --events 10000 --workers 64
 
 the load test prints accepted events, throughput, and p50/p95 request latency. the measured result above is tied to the public github actions run so the environment and output can be checked directly.
 
+## jenkins locally
+
+The root `Jenkinsfile` builds with Java 21/Maven, runs unit tests, starts the
+Compose stack and waits for health, benchmarks 10,000 readings, checks the gate,
+and publishes results. Its always block saves service logs and removes the stack
+after success or failure. GitHub Actions continues to run its existing workflow.
+
+The gate requires **at least 750 events/sec**, **p95 at most 150 ms**, and
+**10,000/10,000 accepted**. Compared with the original Actions measurement of
+1,003 events/sec and 106.6 ms p95, that allows about 25% less throughput and 41%
+more tail latency for machine variation. These are portfolio performance budgets.
+The thresholds are parameters at the top of `Jenkinsfile`.
+
+With Docker Desktop's Linux engine and Compose running, start Jenkins from main:
+
+```bash
+git switch main
+docker compose -f ops/jenkins/compose.yml up -d --build
+docker compose -f ops/jenkins/compose.yml exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+```
+
+Open [local Jenkins](http://localhost:8081), unlock it and finish the setup wizard.
+The image includes Pipeline, Git and JUnit plugins and the build tools. The
+automatically created `pulsegrid` job reads committed files from the local clone's
+`main` branch. For another branch, set `PULSEGRID_BRANCH` before creating the job
+or change an existing job's SCM branch. Leave host ports 8080 and 9090 free.
+The controller uses the Docker socket, so this setup is for trusted local builds.
+
+Click **Build Now** initially, then **Build with Parameters** for later runs.
+The steady-state protocol uses a fixed 120-second warmup before a fresh measured
+10,000-event sample, 64 clients on logical CPU 0, and two-processor JVM awareness.
+See [benchmark environments and evidence](docs/jenkins/README.md) for configuration
+and why the Jenkins and older Actions numbers differ.
+
+To capture evidence, create a Jenkins API token, set `JENKINS_USER` and
+`JENKINS_TOKEN` in your shell, then run:
+
+```bash
+python ops/jenkins/capture_run.py
+python ops/jenkins/capture_run.py --inject-cpu-regression
+```
+
+The second run limits the warmed application to **0.25 CPU**, measures the same
+10,000 readings, and checks the normal **750/150** thresholds. It saves the actual
+Docker CPU configuration, measurements, gate decision and final Jenkins console.
+Cleanup removes the limited container; the next normal run starts unrestricted.
+`FORCE_GATE_FAILURE` remains available as a threshold-wiring test; the CPU-limited
+run is the regression evidence. Use `--build-number N` to export a completed run.
+
+The recorded CPU-regression run accepted 10,000/10,000 readings at **154 events/sec
+and 693.3 ms p95** and made Jenkins finish **FAILURE** at the normal thresholds.
+The earlier passing run and later unrestricted budget miss are also retained in
+[the evidence](docs/jenkins/README.md).
+
+Windows only: `tools/local-dev/keep-awake.ps1` temporarily prevents idle sleep while local builds run.
+
+Stop Jenkins without deleting its history:
+
+```bash
+docker compose -f ops/jenkins/compose.yml down
+```
+
 ## failure handling
 
 - kafka publish failures return an error instead of pretending the event was accepted

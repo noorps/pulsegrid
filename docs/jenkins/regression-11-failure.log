@@ -1,0 +1,436 @@
+Started by user noorps
+Checking out git file:///repo into /var/jenkins_home/jobs/pulsegrid/workspace@script/88219e8079e87a21effd68236eb5d068cb37e35be9de824cce8475ea92a9e1ae to read Jenkinsfile
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/jobs/pulsegrid/workspace@script/88219e8079e87a21effd68236eb5d068cb37e35be9de824cce8475ea92a9e1ae/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url file:///repo # timeout=10
+Fetching upstream changes from file:///repo
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --tags --force --progress -- file:///repo +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/codex/jenkins-pipeline^{commit} # timeout=10
+Checking out Revision 93fdbf45625a8d65132e2753efeded29b508b459 (refs/remotes/origin/codex/jenkins-pipeline)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 93fdbf45625a8d65132e2753efeded29b508b459 # timeout=10
+Commit message: "Exercise normal performance gates with a CPU-limited service"
+ > git rev-list --no-walk 93fdbf45625a8d65132e2753efeded29b508b459 # timeout=10
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/jobs/pulsegrid/workspace
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/jobs/pulsegrid/workspace/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url file:///repo # timeout=10
+Fetching upstream changes from file:///repo
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --tags --force --progress -- file:///repo +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/codex/jenkins-pipeline^{commit} # timeout=10
+Checking out Revision 93fdbf45625a8d65132e2753efeded29b508b459 (refs/remotes/origin/codex/jenkins-pipeline)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 93fdbf45625a8d65132e2753efeded29b508b459 # timeout=10
+Commit message: "Exercise normal performance gates with a CPU-limited service"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timeout
+Timeout set to expire in 30 min
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] sh
++ rm -rf artifacts
++ mkdir -p artifacts
+[Pipeline] sh
++ git rev-parse HEAD
+[Pipeline] sh
++ mvn --batch-mode clean package -DskipTests
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< dev.noorps:pulsegrid >------------------------
+[INFO] Building pulsegrid 0.1.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.4.1:clean (default-clean) @ pulsegrid ---
+[INFO] Deleting /var/jenkins_home/jobs/pulsegrid/workspace/target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ pulsegrid ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ pulsegrid ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 8 source files with javac [debug parameters release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ pulsegrid ---
+[INFO] skip non existing resourceDirectory /var/jenkins_home/jobs/pulsegrid/workspace/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ pulsegrid ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug parameters release 21] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.3:test (default-test) @ pulsegrid ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.2:jar (default-jar) @ pulsegrid ---
+[INFO] Building jar: /var/jenkins_home/jobs/pulsegrid/workspace/target/pulsegrid-0.1.0.jar
+[INFO] 
+[INFO] --- spring-boot:3.4.5:repackage (repackage) @ pulsegrid ---
+[INFO] Replacing main artifact /var/jenkins_home/jobs/pulsegrid/workspace/target/pulsegrid-0.1.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /var/jenkins_home/jobs/pulsegrid/workspace/target/pulsegrid-0.1.0.jar.original
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  6.544 s
+[INFO] Finished at: 2026-10-25T07:00:58Z
+[INFO] ------------------------------------------------------------------------
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Unit tests)
+[Pipeline] sh
++ python3 -m unittest discover -s tools -p test_benchmark_gate.py -v
+test_baseline_and_boundaries (test_benchmark_gate.GateTest.test_baseline_and_boundaries) ... ok
+test_forced_failure (test_benchmark_gate.GateTest.test_forced_failure) ... ok
+test_missing_duplicate_and_invalid_metrics (test_benchmark_gate.GateTest.test_missing_duplicate_and_invalid_metrics) ... ok
+test_regressions (test_benchmark_gate.GateTest.test_regressions) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.002s
+
+OK
+[Pipeline] sh
++ mvn --batch-mode test
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< dev.noorps:pulsegrid >------------------------
+[INFO] Building pulsegrid 0.1.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ pulsegrid ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 0 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ pulsegrid ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ pulsegrid ---
+[INFO] skip non existing resourceDirectory /var/jenkins_home/jobs/pulsegrid/workspace/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ pulsegrid ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.3:test (default-test) @ pulsegrid ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running dev.noorps.pulsegrid.service.LatestReadingStoreTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.217 s -- in dev.noorps.pulsegrid.service.LatestReadingStoreTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  3.546 s
+[INFO] Finished at: 2026-10-25T07:01:05Z
+[INFO] ------------------------------------------------------------------------
+Post stage
+[Pipeline] junit
+Recording test results
+[Checks API] No suitable checks publisher found.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Integration)
+[Pipeline] sh
++ docker compose up -d --build --wait --wait-timeout 180
+ Image pulsegrid-jenkins-app Building 
+ Image pulsegrid-jenkins-prometheus Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.05kB done
+#1 DONE 0.0s
+
+#2 [app internal] load build definition from Dockerfile
+#2 transferring dockerfile: 399B 0.0s done
+#2 DONE 0.1s
+
+#3 [prometheus internal] load build definition from Prometheus.Dockerfile
+#3 transferring dockerfile: 131B 0.0s done
+#3 DONE 0.1s
+
+#4 [app internal] load metadata for docker.io/library/eclipse-temurin:21-jre
+#4 DONE 0.5s
+
+#5 [app internal] load metadata for docker.io/library/maven:3.9.9-eclipse-temurin-21
+#5 ...
+
+#6 [prometheus internal] load metadata for docker.io/prom/prometheus:v3.2.1
+#6 DONE 0.6s
+
+#5 [app internal] load metadata for docker.io/library/maven:3.9.9-eclipse-temurin-21
+#5 DONE 0.6s
+
+#7 [prometheus internal] load .dockerignore
+#7 transferring context: 2B 0.0s done
+#7 DONE 0.1s
+
+#8 [app internal] load build context
+#8 DONE 0.0s
+
+#9 [prometheus internal] load build context
+#9 transferring context: 63B 0.0s done
+#9 DONE 0.1s
+
+#10 [app stage-1 1/3] FROM docker.io/library/eclipse-temurin:21-jre@sha256:227118764cccd3c3294617061aaa93a08309c63a395eefa83e6b35032992ea99
+#10 resolve docker.io/library/eclipse-temurin:21-jre@sha256:227118764cccd3c3294617061aaa93a08309c63a395eefa83e6b35032992ea99
+#10 ...
+
+#11 [prometheus 1/2] FROM docker.io/prom/prometheus:v3.2.1@sha256:6927e0919a144aa7616fd0137d4816816d42f6b816de3af269ab065250859a62
+#11 resolve docker.io/prom/prometheus:v3.2.1@sha256:6927e0919a144aa7616fd0137d4816816d42f6b816de3af269ab065250859a62 0.2s done
+#11 DONE 0.3s
+
+#10 [app stage-1 1/3] FROM docker.io/library/eclipse-temurin:21-jre@sha256:227118764cccd3c3294617061aaa93a08309c63a395eefa83e6b35032992ea99
+#10 resolve docker.io/library/eclipse-temurin:21-jre@sha256:227118764cccd3c3294617061aaa93a08309c63a395eefa83e6b35032992ea99 0.2s done
+#10 DONE 0.3s
+
+#12 [prometheus 2/2] COPY ops/prometheus.yml /etc/prometheus/prometheus.yml
+#12 CACHED
+
+#13 [app build 1/6] FROM docker.io/library/maven:3.9.9-eclipse-temurin-21@sha256:3a4ab3276a087bf276f79cae96b1af04f53731bec53fb2e651aca79e4b10211e
+#13 resolve docker.io/library/maven:3.9.9-eclipse-temurin-21@sha256:3a4ab3276a087bf276f79cae96b1af04f53731bec53fb2e651aca79e4b10211e 0.3s done
+#13 DONE 0.3s
+
+#14 [prometheus] exporting to image
+#14 exporting layers 0.0s done
+#14 exporting manifest sha256:af1b22369843dd6d4b89c349b26ac58be6db13a924c0fd3c41f801d5cb59aab3 0.0s done
+#14 exporting config sha256:761b3569275a1cc29f100808b743b24c988755990000e1fe658dd9b227b2c15d
+#14 ...
+
+#8 [app internal] load build context
+#8 transferring context: 1.65kB 0.0s done
+#8 DONE 0.1s
+
+#15 [app build 3/6] COPY pom.xml .
+#15 CACHED
+
+#16 [app build 4/6] RUN mvn -q -DskipTests dependency:go-offline
+#16 CACHED
+
+#17 [app stage-1 2/3] RUN useradd --system --uid 10001 pulsegrid
+#17 CACHED
+
+#18 [app build 2/6] WORKDIR /workspace
+#18 CACHED
+
+#19 [app build 5/6] COPY src src
+#19 CACHED
+
+#20 [app build 6/6] RUN mvn -q package
+#20 CACHED
+
+#21 [app stage-1 3/3] COPY --from=build /workspace/target/pulsegrid-0.1.0.jar /app.jar
+#21 CACHED
+
+#14 [prometheus] exporting to image
+#14 exporting config sha256:761b3569275a1cc29f100808b743b24c988755990000e1fe658dd9b227b2c15d done
+#14 exporting attestation manifest sha256:b764bac87a038633dedf967b2677cfd3a20c55f03378cd1b09b828a2d2946576 0.1s done
+#14 exporting manifest list sha256:4e4eba4827149948f076b2656944cd9a6541881f2cd9fc2ceae2d472130cd36f
+#14 exporting manifest list sha256:4e4eba4827149948f076b2656944cd9a6541881f2cd9fc2ceae2d472130cd36f 0.1s done
+#14 naming to docker.io/library/pulsegrid-jenkins-prometheus:latest
+#14 naming to docker.io/library/pulsegrid-jenkins-prometheus:latest 0.0s done
+#14 unpacking to docker.io/library/pulsegrid-jenkins-prometheus:latest 0.1s done
+#14 DONE 0.6s
+
+#22 [app] exporting to image
+#22 exporting layers 0.0s done
+#22 exporting manifest sha256:dd9d8035a9831bd0412de1fbfeadde0ec5c3a706227e397c5551d2d6a48e09b3 0.0s done
+#22 exporting config sha256:b6329ae2a439f21d8759b7e7526c088265086e8ab3c1535091a643685660daa3 0.0s done
+#22 exporting attestation manifest sha256:efd9db0075f3d7cf6bbacad1fed75e00945926a6d7ff98d162cb04ae55bccbe9 0.2s done
+#22 exporting manifest list sha256:4fa982c84f8fa9adfbf400f7da0157585a3562fe662b8dde8592055aad34f6d9 0.1s done
+#22 naming to docker.io/library/pulsegrid-jenkins-app:latest done
+#22 unpacking to docker.io/library/pulsegrid-jenkins-app:latest 0.0s done
+#22 DONE 0.5s
+
+#23 [prometheus] resolving provenance for metadata file
+#23 DONE 0.0s
+
+#24 [app] resolving provenance for metadata file
+#24 DONE 0.0s
+ Image pulsegrid-jenkins-app Built 
+ Image pulsegrid-jenkins-prometheus Built 
+ Network pulsegrid-jenkins_default Creating 
+ Network pulsegrid-jenkins_default Creating 
+ Network pulsegrid-jenkins_default Created 
+ Network pulsegrid-jenkins_default Created 
+ Container pulsegrid-jenkins-kafka-1 Creating 
+ Container pulsegrid-jenkins-kafka-1 Created 
+ Container pulsegrid-jenkins-app-1 Creating 
+ Container pulsegrid-jenkins-app-1 Created 
+ Container pulsegrid-jenkins-prometheus-1 Creating 
+ Container pulsegrid-jenkins-prometheus-1 Created 
+ Container pulsegrid-jenkins-kafka-1 Starting 
+ Container pulsegrid-jenkins-kafka-1 Started 
+ Container pulsegrid-jenkins-kafka-1 Waiting 
+ Container pulsegrid-jenkins-kafka-1 Healthy 
+ Container pulsegrid-jenkins-app-1 Starting 
+ Container pulsegrid-jenkins-app-1 Started 
+ Container pulsegrid-jenkins-prometheus-1 Starting 
+ Container pulsegrid-jenkins-prometheus-1 Started 
+ Container pulsegrid-jenkins-kafka-1 Waiting 
+ Container pulsegrid-jenkins-app-1 Waiting 
+ Container pulsegrid-jenkins-prometheus-1 Waiting 
+ Container pulsegrid-jenkins-prometheus-1 Healthy 
+ Container pulsegrid-jenkins-kafka-1 Healthy 
+ Container pulsegrid-jenkins-app-1 Healthy 
+[Pipeline] sh
+curl: (52) Empty reply from server
+curl: (52) Empty reply from server
+curl: (52) Empty reply from server
+curl: (52) Empty reply from server
+curl: (52) Empty reply from server
+[Pipeline] sh
+warmup batch 1 (excluded from the measured benchmark)
+accepted: 10000/10000
+throughput: 455 events/sec
+p50 latency: 117.1 ms
+p95 latency: 270.9 ms
+warmup batch 2 (excluded from the measured benchmark)
+accepted: 10000/10000
+throughput: 676 events/sec
+p50 latency: 79.4 ms
+p95 latency: 200.0 ms
+warmup batch 3 (excluded from the measured benchmark)
+accepted: 10000/10000
+throughput: 708 events/sec
+p50 latency: 73.9 ms
+p95 latency: 196.2 ms
+warmup batch 4 (excluded from the measured benchmark)
+accepted: 10000/10000
+throughput: 660 events/sec
+p50 latency: 77.7 ms
+p95 latency: 218.2 ms
+warmup batch 5 (excluded from the measured benchmark)
+accepted: 10000/10000
+throughput: 784 events/sec
+p50 latency: 62.0 ms
+p95 latency: 186.5 ms
+warmup batch 6 (excluded from the measured benchmark)
+accepted: 10000/10000
+throughput: 797 events/sec
+p50 latency: 59.0 ms
+p95 latency: 188.0 ms
+warmup batch 7 (excluded from the measured benchmark)
+accepted: 10000/10000
+throughput: 770 events/sec
+p50 latency: 61.2 ms
+p95 latency: 190.8 ms
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Benchmark)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ docker compose ps -q app
++ docker update --cpus 0.25 523b1e32c5b18e04e2b5c60302e542ac3f92bd129e3eea120cfa6311c01a0363
+523b1e32c5b18e04e2b5c60302e542ac3f92bd129e3eea120cfa6311c01a0363
++ docker compose ps -q app
++ docker inspect --format {{json .HostConfig}} 523b1e32c5b18e04e2b5c60302e542ac3f92bd129e3eea120cfa6311c01a0363
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] sh
++ sh tools/jenkins_benchmark.sh 10000
+[Pipeline] sh
++ cat artifacts/benchmark.txt
+accepted: 10000/10000
+throughput: 154 events/sec
+p50 latency: 396.8 ms
+p95 latency: 693.3 ms
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Gate)
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
+{
+  "passed": false,
+  "accepted": 10000,
+  "total": 10000,
+  "events_per_sec": 154.0,
+  "p95_ms": 693.3,
+  "min_events_per_sec": 750.0,
+  "max_p95_ms": 150.0,
+  "failures": [
+    "throughput 154.0 < 750.0 events/sec",
+    "p95 693.3 > 150.0 ms"
+  ]
+}
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Publish)
+Stage "Publish" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ mkdir -p artifacts
++ docker compose logs --no-color
+[Pipeline] sh
++ docker container inspect pulsegrid-jenkins-benchmark
+[Pipeline] sh
++ docker compose down --volumes --remove-orphans
+ Container pulsegrid-jenkins-prometheus-1 Stopping 
+ Container pulsegrid-jenkins-prometheus-1 Stopped 
+ Container pulsegrid-jenkins-prometheus-1 Removing 
+ Container pulsegrid-jenkins-prometheus-1 Removed 
+ Container pulsegrid-jenkins-app-1 Stopping 
+ Container pulsegrid-jenkins-app-1 Stopped 
+ Container pulsegrid-jenkins-app-1 Removing 
+ Container pulsegrid-jenkins-app-1 Removed 
+ Container pulsegrid-jenkins-kafka-1 Stopping 
+ Container pulsegrid-jenkins-kafka-1 Stopped 
+ Container pulsegrid-jenkins-kafka-1 Removing 
+ Container pulsegrid-jenkins-kafka-1 Removed 
+ Network pulsegrid-jenkins_default Removing 
+ Network pulsegrid-jenkins_default Removed 
+[Pipeline] archiveArtifacts
+Archiving artifacts
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 1
+Finished: FAILURE

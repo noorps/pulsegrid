@@ -1,0 +1,4 @@
+accepted: 10000/10000
+throughput: 1350 events/sec
+p50 latency: 36.1 ms
+p95 latency: 117.0 ms

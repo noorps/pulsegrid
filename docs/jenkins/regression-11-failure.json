@@ -1,0 +1,172 @@
+{
+  "_class": "org.jenkinsci.plugins.workflow.job.WorkflowRun",
+  "actions": [
+    {
+      "_class": "hudson.model.ParametersAction",
+      "parameters": [
+        {
+          "_class": "hudson.model.StringParameterValue",
+          "name": "MIN_EVENTS_PER_SEC",
+          "value": "750"
+        },
+        {
+          "_class": "hudson.model.StringParameterValue",
+          "name": "MAX_P95_MS",
+          "value": "150"
+        },
+        {
+          "_class": "hudson.model.BooleanParameterValue",
+          "name": "FORCE_GATE_FAILURE",
+          "value": false
+        },
+        {
+          "_class": "hudson.model.BooleanParameterValue",
+          "name": "INJECT_CPU_REGRESSION",
+          "value": true
+        }
+      ]
+    },
+    {
+      "_class": "hudson.model.CauseAction",
+      "causes": [
+        {
+          "_class": "hudson.model.Cause$UserIdCause",
+          "shortDescription": "Started by user noorps",
+          "userId": "noorps",
+          "userName": "noorps"
+        }
+      ]
+    },
+    {
+      "_class": "hudson.plugins.git.util.BuildData",
+      "buildsByBranchName": {
+        "refs/remotes/origin/codex/jenkins-pipeline": {
+          "_class": "hudson.plugins.git.util.Build",
+          "buildNumber": 11,
+          "buildResult": null,
+          "marked": {
+            "SHA1": "93fdbf45625a8d65132e2753efeded29b508b459",
+            "branch": [
+              {
+                "SHA1": "93fdbf45625a8d65132e2753efeded29b508b459",
+                "name": "refs/remotes/origin/codex/jenkins-pipeline"
+              }
+            ]
+          },
+          "revision": {
+            "SHA1": "93fdbf45625a8d65132e2753efeded29b508b459",
+            "branch": [
+              {
+                "SHA1": "93fdbf45625a8d65132e2753efeded29b508b459",
+                "name": "refs/remotes/origin/codex/jenkins-pipeline"
+              }
+            ]
+          }
+        }
+      },
+      "lastBuiltRevision": {
+        "SHA1": "93fdbf45625a8d65132e2753efeded29b508b459",
+        "branch": [
+          {
+            "SHA1": "93fdbf45625a8d65132e2753efeded29b508b459",
+            "name": "refs/remotes/origin/codex/jenkins-pipeline"
+          }
+        ]
+      },
+      "remoteUrls": [
+        "file:///repo"
+      ],
+      "scmName": ""
+    },
+    {},
+    {
+      "_class": "org.jenkinsci.plugins.workflow.libs.LibrariesAction"
+    },
+    {},
+    {
+      "_class": "hudson.tasks.junit.TestResultAction",
+      "failCount": 0,
+      "skipCount": 0,
+      "totalCount": 3,
+      "urlName": "testReport"
+    },
+    {},
+    {},
+    {
+      "_class": "org.jenkinsci.plugins.displayurlapi.actions.RunDisplayAction"
+    },
+    {
+      "_class": "org.jenkinsci.plugins.pipeline.modeldefinition.actions.RestartDeclarativePipelineAction"
+    },
+    {},
+    {
+      "_class": "org.jenkinsci.plugins.workflow.job.views.FlowGraphAction"
+    },
+    {},
+    {}
+  ],
+  "artifacts": [
+    {
+      "displayPath": "benchmark.txt",
+      "fileName": "benchmark.txt",
+      "relativePath": "artifacts/benchmark.txt"
+    },
+    {
+      "displayPath": "compose.log",
+      "fileName": "compose.log",
+      "relativePath": "artifacts/compose.log"
+    },
+    {
+      "displayPath": "gate.json",
+      "fileName": "gate.json",
+      "relativePath": "artifacts/gate.json"
+    },
+    {
+      "displayPath": "health.json",
+      "fileName": "health.json",
+      "relativePath": "artifacts/health.json"
+    },
+    {
+      "displayPath": "regression.json",
+      "fileName": "regression.json",
+      "relativePath": "artifacts/regression.json"
+    },
+    {
+      "displayPath": "revision.txt",
+      "fileName": "revision.txt",
+      "relativePath": "artifacts/revision.txt"
+    },
+    {
+      "displayPath": "warmup.txt",
+      "fileName": "warmup.txt",
+      "relativePath": "artifacts/warmup.txt"
+    }
+  ],
+  "building": false,
+  "description": null,
+  "displayName": "#11",
+  "duration": 257662,
+  "estimatedDuration": 221264,
+  "executor": null,
+  "fullDisplayName": "pulsegrid #11",
+  "id": "11",
+  "keepLog": false,
+  "number": 11,
+  "queueId": 20,
+  "result": "FAILURE",
+  "timestamp": 1792911645627,
+  "url": "http://localhost:8081/job/pulsegrid/11/",
+  "changeSets": [],
+  "culprits": [
+    {
+      "absoluteUrl": "http://localhost:8081/user/purnoorsharma",
+      "fullName": "purnoorsharma"
+    }
+  ],
+  "inProgress": false,
+  "nextBuild": null,
+  "previousBuild": {
+    "number": 10,
+    "url": "http://localhost:8081/job/pulsegrid/10/"
+  }
+}

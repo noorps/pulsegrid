@@ -1,0 +1,47 @@
+[
+  {
+    "Id": "sha256:98f24c123ee1e7c97f9b7d0490320ead41cc70daac4a41c44f3c712bedc8ca95",
+    "RepoTags": [
+      "pulsegrid-ci-jenkins:latest"
+    ],
+    "RepoDigests": [
+      "pulsegrid-ci-jenkins@sha256:98f24c123ee1e7c97f9b7d0490320ead41cc70daac4a41c44f3c712bedc8ca95"
+    ]
+  },
+  {
+    "Id": "sha256:e0a99ffcdbd40659d0f90f518c4a5694e03f814910af67e81b4868522062de48",
+    "RepoTags": [
+      "pulsegrid-jenkins-app:latest"
+    ],
+    "RepoDigests": [
+      "pulsegrid-jenkins-app@sha256:e0a99ffcdbd40659d0f90f518c4a5694e03f814910af67e81b4868522062de48"
+    ]
+  },
+  {
+    "Id": "sha256:df91930cdeb5bef008159b2c39d85d5524e422a5ad435aa8ea1405dc15ab9506",
+    "RepoTags": [
+      "pulsegrid-jenkins-prometheus:latest"
+    ],
+    "RepoDigests": [
+      "pulsegrid-jenkins-prometheus@sha256:df91930cdeb5bef008159b2c39d85d5524e422a5ad435aa8ea1405dc15ab9506"
+    ]
+  },
+  {
+    "Id": "sha256:fbc7d7c428e3755cf36518d4976596002477e4c052d1f80b5b9eafd06d0fff2f",
+    "RepoTags": [
+      "apache/kafka:3.9.0"
+    ],
+    "RepoDigests": [
+      "apache/kafka@sha256:fbc7d7c428e3755cf36518d4976596002477e4c052d1f80b5b9eafd06d0fff2f"
+    ]
+  },
+  {
+    "Id": "sha256:d98cc29d3266e535dd9da1099688d9cb3ca4753813571e071763d17725460962",
+    "RepoTags": [
+      "python:3.13-slim"
+    ],
+    "RepoDigests": [
+      "python@sha256:d98cc29d3266e535dd9da1099688d9cb3ca4753813571e071763d17725460962"
+    ]
+  }
+]

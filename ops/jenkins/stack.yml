@@ -1,0 +1,14 @@
+services:
+  app:
+    environment:
+      JAVA_TOOL_OPTIONS: '-XX:ActiveProcessorCount=2'
+  kafka:
+    environment:
+      JAVA_TOOL_OPTIONS: '-XX:ActiveProcessorCount=2'
+  prometheus:
+    image: pulsegrid-jenkins-prometheus
+    build:
+      context: .
+      dockerfile: ops/jenkins/Prometheus.Dockerfile
+    # The host daemon cannot bind files from the controller's workspace.
+    volumes: !reset []

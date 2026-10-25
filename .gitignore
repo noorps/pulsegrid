@@ -3,3 +3,5 @@ target/
 *.iml
 .vscode/
 *.log
+!docs/jenkins/*.log
+__pycache__/

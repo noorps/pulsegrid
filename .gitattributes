@@ -1,0 +1,4 @@
+Jenkinsfile text eol=lf
+tools/*.sh text eol=lf
+# Preserve authentic console bytes and checksums on Windows checkouts.
+docs/jenkins/*.log -text -whitespace

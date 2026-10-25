@@ -1,0 +1,17 @@
+{
+  "checked_utc": "2026-10-25T07:04:30.2349482Z",
+  "container_id": "523b1e32c5b18e04e2b5c60302e542ac3f92bd129e3eea120cfa6311c01a0363",
+  "nano_cpus": 250000000,
+  "cgroup_cpu_max": "25000 100000",
+  "usage": {
+    "BlockIO": "14.4MB / 303kB",
+    "CPUPerc": "22.23%",
+    "Container": "523b1e32c5b1",
+    "ID": "523b1e32c5b1",
+    "MemPerc": "5.29%",
+    "MemUsage": "412MiB / 7.602GiB",
+    "Name": "pulsegrid-jenkins-app-1",
+    "NetIO": "122MB / 117MB",
+    "PIDs": "106"
+  }
+}
