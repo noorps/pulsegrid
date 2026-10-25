@@ -41,6 +41,25 @@ python ops/jenkins/capture_run.py --build-number 8
 python ops/jenkins/capture_run.py --build-number 9 --force-gate-failure
 ```
 
+## Why the two published measurements differ
+
+| | Original Actions run #2 | Local Jenkins build #8 |
+| --- | --- | --- |
+| Result | 1,003 events/sec; 56.3 ms p50; 106.6 ms p95 | 1,392 events/sec; 34.7 ms p50; 116.6 ms p95 |
+| Hardware | GitHub-hosted x64 public Linux runner; documented standard class: 4 vCPU, 16 GB RAM. The job did not record a CPU model or live hardware inventory. | Intel Core i7-1355U laptop, 10 physical cores / 12 logical processors, 16 GB host RAM; Docker VM exposes 12 logical CPUs and about 7.6 GiB RAM. |
+| OS | Ubuntu 24.04.5; runner image `20260907.300.1`, recorded in the original job log | Windows 11 with Docker Desktop / WSL2 Linux `6.18.33.2-microsoft-standard-WSL2` |
+| Request path | Host Python to `localhost:8080` through the Compose published port | `python:3.13-slim` container directly to the app's Compose network; address pinned in its hosts file; client pinned to logical CPU 0 |
+| Warmup and runtime | Starts the stack, waits for health, then measures; no explicit warmup or JVM processor override | Fixed 120-second warmup, then a fresh measured sample; app and broker JVMs use `-XX:ActiveProcessorCount=2` |
+| Shared workload | 10,000 readings, 64 workers, one Kafka 3.9.0 broker, Java 21 / Spring Boot application | Same load-test script, event count, worker count, broker version and application |
+
+The original [job log](https://github.com/noorps/pulsegrid/actions/runs/34680597374/job/103518415961)
+records the runner image, while GitHub documents the [standard public-runner hardware class](https://docs.github.com/en/actions/reference/runners/github-hosted-runners#standard-github-hosted-runners-for-public-repositories).
+These are different hardware and measurement configurations, so they describe two
+environments rather than a controlled before/after improvement. Higher throughput
+and lower median latency can coexist with a higher p95 because the tail measures
+the slower requests. The original job did not capture enough hardware detail to
+attribute the differences to a specific CPU model.
+
 ## Measurement protocol
 
 This is a **steady-state local benchmark**. Each build starts a fresh Compose
@@ -94,5 +113,5 @@ the primary runs. Cold and short-warmup misses are retained so the steady-state
 measurement's limits are explicit. Docker's startup failure was repaired by
 recoverably relocating stale runtime socket directories, preserving images and
 volumes. Keep the computer awake while reproducing the tests; the optional
-`ops/jenkins/keep-awake.ps1` requests temporary idle-sleep prevention without changing
+`tools/local-dev/keep-awake.ps1` requests temporary idle-sleep prevention without changing
 the power plan. See the root README for setup, authentication and shutdown commands.

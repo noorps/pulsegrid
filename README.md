@@ -66,99 +66,60 @@ the load test prints accepted events, throughput, and p50/p95 request latency. t
 
 ## jenkins locally
 
-Jenkins runs alongside the unchanged GitHub Actions workflow. The root `Jenkinsfile`
-builds with Java 21/Maven, runs unit tests, starts Compose and checks API health,
-runs the existing 10,000-event benchmark, applies the gate, and publishes artifacts.
-Integration sends separate 10,000-event warmup batches for a fixed 120 seconds
-(finishing the last batch) before the measured run. This settles JVM compilation
-and Kafka initialization on the local machine. Warmup output is archived separately;
-the gate checks only the subsequent fresh 10,000-event run. This is a steady-state
-benchmark, and the warmup duration never depends on whether metrics pass. Earlier
-cold and short-warmup runs missed the budgets and are retained in the evidence.
-The historical GitHub Actions measurement used its original workflow.
-Its `post { always { ... } }` block collects service logs and tears down Compose,
-including volumes, after success or failure. Failed gates still archive their results.
+The root `Jenkinsfile` builds with Java 21/Maven, runs unit tests, starts the
+Compose stack and waits for health, benchmarks 10,000 readings, checks the gate,
+and publishes results. Its always block saves service logs and removes the stack
+after success or failure. GitHub Actions continues to run its existing workflow.
 
-The gate defaults at the top of `Jenkinsfile` require **750 events/sec minimum**,
-**150 ms p95 maximum**, and **10,000/10,000 accepted**. Relative to the recorded
-GitHub Actions baseline (1,003 events/sec, 106.6 ms p95), these allow about 25%
-less throughput and 41% more p95 latency for local machine variation. These are
-portfolio performance budgets, not production SLOs. Missing or malformed output
-fails the gate. Parameters make thresholds adjustable without editing code.
+The gate requires **at least 750 events/sec**, **p95 at most 150 ms**, and
+**10,000/10,000 accepted**. Compared with the original Actions measurement of
+1,003 events/sec and 106.6 ms p95, that allows about 25% less throughput and 41%
+more tail latency for machine variation. These are portfolio performance budgets.
+The thresholds are parameters at the top of `Jenkinsfile`.
 
-Verified locally in Jenkins: build #8 finished **SUCCESS**, accepting 10,000/10,000
-at **1,392 events/sec and 116.6 ms p95** after the fixed warmup. Build #9 used an
-impossible throughput threshold and finished **FAILURE** at the Gate stage; its
-measured performance was 1,350 events/sec and 117.0 ms p95. Both ran source
-`a6d8c8699aaaf12f95eff36e83ec84015800bad3`.
-
-For a local, single-user Jenkins instance, install Docker Desktop with a working
-Linux engine and Docker Compose, and check out the implementation branch:
+With Docker Desktop's Linux engine and Compose running, start Jenkins from main:
 
 ```bash
-git switch codex/jenkins-pipeline
+git switch main
 docker compose -f ops/jenkins/compose.yml up -d --build
 docker compose -f ops/jenkins/compose.yml exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 ```
 
-Open [local Jenkins](http://localhost:8081), unlock with that password, and finish
-the setup wizard, creating your admin account (for example, `noorps`). The image
-preinstalls Pipeline, Git, and JUnit plugins, Maven, Python, and Docker Compose.
-The `pulsegrid` job is created automatically and checks out **committed** files
-from this local clone's `codex/jenkins-pipeline` branch. Commit changes before
-running it. A different branch requires changing the job's SCM branch setting.
+Open [local Jenkins](http://localhost:8081), unlock it and finish the setup wizard.
+The image includes Pipeline, Git and JUnit plugins and the build tools. The
+automatically created `pulsegrid` job reads committed files from the local clone's
+`main` branch. For another branch, set `PULSEGRID_BRANCH` before creating the job
+or change an existing job's SCM branch. Leave host ports 8080 and 9090 free.
+The controller uses the Docker socket, so this setup is for trusted local builds.
 
-The controller uses the host Docker engine through `/var/run/docker.sock` and
-checks API health at `http://docker:8080` through a host-gateway alias. Warmup and
-measurement use a disposable `python:3.13-slim` container on the application's
-Compose network at `http://app:8080`, avoiding Docker Desktop's published-port
-route for measured traffic. The unchanged load-test script is streamed over stdin,
-so the benchmark needs no host workspace bind mount. The app address is pinned
-in the load container's hosts file to avoid repeated Docker DNS queries. The client
-uses 64 workers on logical CPU 0 (`BENCHMARK_CPUSET`); both service JVMs see two
-processors through `-XX:ActiveProcessorCount=2`. This local profile reduces scheduling
-overhead; it is not a CPU quota on the services. The Jenkins-only
-`ops/jenkins/stack.yml` override builds Prometheus with the same configuration baked
-into its image, avoiding a bind mount from a workspace the host daemon cannot see.
-The root Compose file and GitHub Actions workflow are unchanged. Leave host ports
-8080 and 9090 free, and use one PulseGrid job at a time. Jenkins listens only on
-host loopback at port 8081.
+Click **Build Now** initially, then **Build with Parameters** for later runs.
+The steady-state protocol uses a fixed 120-second warmup before a fresh measured
+10,000-event sample, 64 clients on logical CPU 0, and two-processor JVM awareness.
+See [benchmark environments and evidence](docs/jenkins/README.md) for configuration
+and why the Jenkins and older Actions numbers differ.
 
-Docker socket access gives Jenkins broad control over the Docker host, including
-the ability to mount host files. This setup runs trusted builds on the controller;
-use it only for local, single-user development.
-
-Keep the computer awake during builds: Windows Modern Standby interrupted one
-verification run and broke its connection. On Windows, optionally run
-`./ops/jenkins/keep-awake.ps1` in a separate PowerShell window. It temporarily prevents
-idle sleep for 30 minutes (or `-Minutes 60`) and releases the request on exit.
-
-Click **Build Now** for the first run; subsequent runs expose **Build with Parameters**.
-For authentic evidence capture, generate an API token under your Jenkins account's
-Security settings, set `JENKINS_USER` and `JENKINS_TOKEN` in your shell, and run:
+To capture evidence, create a Jenkins API token, set `JENKINS_USER` and
+`JENKINS_TOKEN` in your shell, then run:
 
 ```bash
 python ops/jenkins/capture_run.py
-python ops/jenkins/capture_run.py --force-gate-failure
+python ops/jenkins/capture_run.py --inject-cpu-regression
 ```
 
-The second command raises only that run's throughput minimum to an intentionally
-impossible 1,000,000,000,000 events/sec. It does not alter benchmark measurements
-or persist a broken threshold. It requires Jenkins `FAILURE` and an archived
-throughput gate rejection; an earlier infrastructure failure does not qualify.
-The next normal run again uses 750/150 defaults. The script saves unmodified
-`consoleText` and Jenkins build metadata under `docs/jenkins/`. Jenkins also archives
-benchmark text, gate JSON, revision, health response, service logs, and (on success)
-the application JAR. Review evidence before committing it.
-Use `--build-number N` to re-export a completed run without starting another build.
+The second run limits the warmed application to **0.25 CPU**, measures the same
+10,000 readings, and checks the normal **750/150** thresholds. It saves the actual
+Docker CPU configuration, measurements, gate decision and final Jenkins console.
+Cleanup removes the limited container; the next normal run starts unrestricted.
+`FORCE_GATE_FAILURE` remains available as a threshold-wiring test; the CPU-limited
+run is the regression evidence. Use `--build-number N` to export a completed run.
 
-Stop local Jenkins after use (keeps its volume and leaves Docker Desktop running):
+Windows only: `tools/local-dev/keep-awake.ps1` temporarily prevents idle sleep while local builds run.
+
+Stop Jenkins without deleting its history:
 
 ```bash
 docker compose -f ops/jenkins/compose.yml down
 ```
-
-Execution status and evidence are recorded in [docs/jenkins](docs/jenkins/README.md).
 
 ## failure handling
 
