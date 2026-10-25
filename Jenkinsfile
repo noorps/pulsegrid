@@ -9,8 +9,9 @@ pipeline {
         COMPOSE_PROJECT_NAME = 'pulsegrid-jenkins'
         COMPOSE_FILE = 'docker-compose.yml:ops/jenkins/stack.yml'
         BENCHMARK_BASE_URL = 'http://docker:8080'
-        WARMUP_EVENTS = '2000'
+        WARMUP_SECONDS = '120'
         BENCHMARK_IMAGE = 'python:3.13-slim'
+        BENCHMARK_CPUSET = '0'
     }
     options {
         disableConcurrentBuilds()
@@ -47,8 +48,18 @@ done
 echo 'Application did not become healthy' >&2
 exit 1
 '''
-                // Settle JVM compilation and Kafka metadata before the measured 10k run.
-                sh 'sh tools/jenkins_benchmark.sh "$WARMUP_EVENTS" > artifacts/warmup.txt'
+                // Fixed duration, independent of measured performance or gate outcome.
+                sh '''#!/bin/sh
+set -eu
+deadline=$(( $(date +%s) + WARMUP_SECONDS ))
+batch=0
+while [ "$(date +%s)" -lt "$deadline" ]; do
+    batch=$((batch + 1))
+    echo "warmup batch $batch (excluded from the measured benchmark)"
+    sh tools/jenkins_benchmark.sh 10000
+done > artifacts/warmup.txt
+cat artifacts/warmup.txt
+'''
             }
         }
         stage('Benchmark') {

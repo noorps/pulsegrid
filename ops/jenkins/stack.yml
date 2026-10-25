@@ -1,4 +1,10 @@
 services:
+  app:
+    environment:
+      JAVA_TOOL_OPTIONS: '-XX:ActiveProcessorCount=2'
+  kafka:
+    environment:
+      JAVA_TOOL_OPTIONS: '-XX:ActiveProcessorCount=2'
   prometheus:
     image: pulsegrid-jenkins-prometheus
     build:
